@@ -1,4 +1,4 @@
-package spike;
+package src.spike;
 
 public class CourseResult {
 
@@ -34,8 +34,7 @@ public class CourseResult {
 	
 	public String toString() {
 		String str = "";
-		str += course.getCourseNumber() + "\t" + course.getSection() + "\t" + course.getCourseName() + "\t" + grade
-				+ "\t" + course.getCreditHours() + "\t" + course.getSection().getTerm();
+		str += course.getCourseNumber() + "\t" + course.getSection().getSectionId() + "\t" + grade + "\t" + course.getCreditHours() + "\t" + course.getSection().getTerm();
 		return str;
 	}
 }

@@ -1,11 +1,16 @@
-package spike;
+package src.spike;
 
 public class Course {
 
 	private String courseNumber;
 	private Section section;
-	private String courseName;
 	private double creditHours;
+
+	public Course(String courseNum, Section section, double creditHours){
+		this.courseNumber = courseNum;
+		this.section = section;
+		this.creditHours = creditHours;
+	}
 
 	public String getCourseNumber() {
 		return courseNumber;
@@ -21,14 +26,6 @@ public class Course {
 
 	public void setSection(Section sections) {
 		this.section = sections;
-	}
-
-	public String getCourseName() {
-		return courseName;
-	}
-
-	public void setCourseName(String courseName) {
-		this.courseName = courseName;
 	}
 
 	public double getCreditHours() {
