@@ -1,11 +1,11 @@
-package spike;
+package src.spike;
 
 import java.util.ArrayList;
 
 public class Transcript {
 
 	private static int transcriptID = 0;
-	private ArrayList<CourseResult> courseResults = new ArrayList<CourseResult>();
+	private ArrayList<CourseResult> courseResults = new ArrayList<>();
 
 	public Transcript() {
 		transcriptID++;
