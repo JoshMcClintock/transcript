@@ -1,4 +1,4 @@
-package src.spike;
+package spike;
 
 import java.util.ArrayList;
 

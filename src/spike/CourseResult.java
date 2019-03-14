@@ -1,4 +1,4 @@
-package src.spike;
+package spike;
 
 public class CourseResult {
 

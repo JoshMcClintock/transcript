@@ -1,4 +1,4 @@
-package src.spike;
+package spike;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
