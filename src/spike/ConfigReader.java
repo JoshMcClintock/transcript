@@ -13,10 +13,70 @@ import java.util.*;
 
 public class ConfigReader {
 
-    public static void main(String[] args) {
+    public static void readTranscript(String fileName){
+        Transcript transcript = new Transcript();
+        BufferedReader br = null;
+        FileReader fr = null;
 
-        final String FILENAME = "config.txt";
+        BufferedWriter bw = null;
+        FileWriter fw = null;
 
+        try {
+            fr = new FileReader(fileName);
+            br = new BufferedReader(fr);
+
+            fw = new FileWriter("result.text");
+            bw = new BufferedWriter(fw);
+
+            String sCurrentLine;
+
+            while ((sCurrentLine = br.readLine()) != null) {
+                if (!sCurrentLine.isEmpty()) {
+                    String str = sCurrentLine.replaceAll("\\s", ",");
+                    String[] array = str.split("\\,");
+                    ArrayList<String> arrayList = new ArrayList<>();
+                    for (String s : array) {
+                        if (!s.isEmpty())
+                            arrayList.add(s);
+                    }
+
+                    // Create objects
+                    String courseNum = arrayList.get(0);
+                    String sectionId = arrayList.get(1);
+                    String grade = arrayList.get(arrayList.size() - 3);
+                    String ch = arrayList.get(arrayList.size() - 2);
+                    String term = arrayList.get(arrayList.size() - 1);
+
+                    Section s = new Section(sectionId, term);
+                    Course c = new Course(courseNum, s, Double.parseDouble(ch));
+                    CourseResult cr = new CourseResult(c, grade);
+                    transcript.addCourseResult(cr);
+                }
+            }
+            //print the transcript to see if any bug here
+            //System.out.println(transcript);
+            //bw.write(transcript.toString()); //print something to file now
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null)
+                    br.close();
+                if (fr != null)
+                    fr.close();
+                if (bw != null)
+                    bw.close();
+                if (fw != null)
+                    fw.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
+
+
+    public static void readArea(String fileName){
         BufferedReader br = null;
         FileReader fr = null;
         Scanner scanner;
@@ -24,7 +84,7 @@ public class ConfigReader {
         ArrayList<String> arealist = new ArrayList<>();
 
         try {
-            fr = new FileReader(FILENAME);
+            fr = new FileReader(fileName);
             br = new BufferedReader(fr);
 
             String sCurrentLine;
@@ -41,7 +101,7 @@ public class ConfigReader {
             }
             ArrayList<ArrayList<String>> courseList = new ArrayList<>();
 
-            fr = new FileReader(FILENAME);
+            fr = new FileReader(fileName);
             br = new BufferedReader(fr);
 
             ArrayList<String> temp = new ArrayList<>();
@@ -75,5 +135,10 @@ public class ConfigReader {
             }
         }
 
+    }
+
+    public static void main(String[] args) {
+        readTranscript("transcript.txt");
+        readArea("area.txt");
     }
 }
