@@ -13,14 +13,18 @@ import java.util.*;
 
 public class ConfigReader {
 
+    static BufferedReader br = null;
+    static FileReader fr = null;
+    static BufferedWriter bw = null;
+    static FileWriter fw = null;
+    static Scanner scanner = null;
+
+    static Transcript transcript = new Transcript();
+    static ArrayList<ArrayList<String>> equivalencies = new ArrayList<>();
+    static ArrayList<String> areaType = new ArrayList<>();
+    static ArrayList<ArrayList<String>> courseListPerArea = new ArrayList<>();
+
     public static void readTranscript(String fileName){
-        Transcript transcript = new Transcript();
-        BufferedReader br = null;
-        FileReader fr = null;
-
-        BufferedWriter bw = null;
-        FileWriter fw = null;
-
         try {
             fr = new FileReader(fileName);
             br = new BufferedReader(fr);
@@ -77,12 +81,6 @@ public class ConfigReader {
 
 
     public static void readArea(String fileName){
-        BufferedReader br = null;
-        FileReader fr = null;
-        Scanner scanner;
-
-        ArrayList<String> arealist = new ArrayList<>();
-
         try {
             fr = new FileReader(fileName);
             br = new BufferedReader(fr);
@@ -91,15 +89,11 @@ public class ConfigReader {
 
             while ((sCurrentLine = br.readLine()) != null) {
                 if (!sCurrentLine.isEmpty()) {
-                    scanner = new Scanner(sCurrentLine);
-                    String str = scanner.next();
-
-                    if (!str.matches(".*\\d.*")){
-                        arealist.add(str);
+                    if (!sCurrentLine.matches(".*\\d.*")){
+                        areaType.add(sCurrentLine);
                     }
                 }
             }
-            ArrayList<ArrayList<String>> courseList = new ArrayList<>();
 
             fr = new FileReader(fileName);
             br = new BufferedReader(fr);
@@ -108,10 +102,10 @@ public class ConfigReader {
 
             while ((sCurrentLine = br.readLine()) != null) {
                 if (!sCurrentLine.isEmpty()) {
-                    if (arealist.contains(sCurrentLine)){
+                    if (areaType.contains(sCurrentLine)){
                         if (!temp.isEmpty()) {
                             //System.out.println(temp);
-                            courseList.add(temp);
+                            courseListPerArea.add(temp);
                         }
                         temp = new ArrayList<>();
                     }
@@ -119,26 +113,74 @@ public class ConfigReader {
                 }
             }
 
-            System.out.println(arealist);//read the areaList, find the index, and use the index in courseList to find the match course
-            System.out.println(courseList);//2d arrayList for courseList
+            System.out.println(areaType);//read the areaList, find the index, and use the index in courseListPerArea to find the match course
+            System.out.println(courseListPerArea);//2d arrayList for courseListPerArea
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
                 if (br != null)
                     br.close();
-
                 if (fr != null)
                     fr.close();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
+    }
 
+    public static void readEquivalencies(String fileName){
+        ArrayList<String> temp;
+
+        try {
+            fr = new FileReader(fileName);
+            br = new BufferedReader(fr);
+
+            String sCurrentLine;
+            String str;
+            while ((sCurrentLine = br.readLine()) != null) {
+                temp = new ArrayList<>();
+                str = sCurrentLine.replaceAll("\\s", ",");
+                String[] array = str.split("\\,");
+                for (String s : array) {
+                        temp.add(s);
+                }
+                equivalencies.add(temp);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            System.out.println(equivalencies); //test if it works
+            try {
+                if (br != null)
+                    br.close();
+                if (fr != null)
+                    fr.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public static Transcript getTranscript(){
+        return transcript;
+    }
+
+    public static ArrayList<ArrayList<String>> getEquivalencies(){
+        return equivalencies;
+    }
+
+    public static ArrayList<ArrayList<String>> getCourseListPerArea(){
+        return courseListPerArea;
+    }
+
+    public static ArrayList<String> getAreaType(){
+        return areaType;
     }
 
     public static void main(String[] args) {
         readTranscript("transcript.txt");
         readArea("area.txt");
+        readEquivalencies("equivalencies.txt");
     }
 }
