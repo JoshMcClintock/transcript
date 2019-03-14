@@ -25,7 +25,7 @@ public class ConfigReader {
             fr = new FileReader(fileName);
             br = new BufferedReader(fr);
 
-            fw = new FileWriter("result.text");
+            fw = new FileWriter("result.txt");
             bw = new BufferedWriter(fw);
 
             String sCurrentLine;
@@ -55,7 +55,7 @@ public class ConfigReader {
             }
             //print the transcript to see if any bug here
             //System.out.println(transcript);
-            //bw.write(transcript.toString()); //print something to file now
+            bw.write(transcript.toString()); //print something to file now
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
