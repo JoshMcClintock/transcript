@@ -1,9 +1,9 @@
 package src.spike;
 
 import java.io.BufferedReader;
-//import java.io.BufferedWriter;
+import java.io.BufferedWriter;
 import java.io.FileReader;
-//import java.io.FileWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
@@ -11,15 +11,22 @@ public class Driver {
 
 	public static void main(String[] args) {
 
-		final String FILENAME = "transcript.txt"; // CHANGE
+		final String FILENAME = "transcript.txt";
+		final String OUTPUT = "result.txt";
 		Transcript transcript = new Transcript();
 
 		BufferedReader br = null;
 		FileReader fr = null;
 
+		BufferedWriter bw = null;
+		FileWriter fw = null;
+
 		try {
 			fr = new FileReader(FILENAME);
 			br = new BufferedReader(fr);
+
+			fw = new FileWriter(OUTPUT);
+			bw = new BufferedWriter(fw);
 
 			String sCurrentLine;
 
@@ -47,57 +54,27 @@ public class Driver {
 				}
 			}
 			System.out.println(transcript);
+			bw.write(transcript.toString()); //print something to file now
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (br != null) {
+				if (br != null)
 					br.close();
-				}
 
-				if (fr != null) {
+				if (fr != null)
 					fr.close();
-				}
+
+				if (bw != null)
+					bw.close();
+
+				if (fw != null)
+					fw.close();
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
 		}
+			System.out.println("Done"); //keep it to track the end of file right now
 
-//		final String OUTPUT = "result.txt";
-//
-//		BufferedWriter bw = null;
-//		FileWriter fw = null;
-//
-//		try {
-//
-//			String content = "This is the content to write into file\n";
-//
-//			fw = new FileWriter(OUTPUT);
-//			bw = new BufferedWriter(fw);
-//			bw.write(content);
-//
-//			System.out.println("Done");
-//
-//		} catch (IOException e) {
-//
-//			e.printStackTrace();
-//
-//		} finally {
-//
-//			try {
-//
-//				if (bw != null)
-//					bw.close();
-//
-//				if (fw != null)
-//					fw.close();
-//
-//			} catch (IOException ex) {
-//
-//				ex.printStackTrace();
-//
-//			}
-//
-//		}
 	}
 }

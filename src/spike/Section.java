@@ -24,10 +24,10 @@ public class Section {
 	}
 
 	public void setCampus(String sectionId) {
-		if (sectionId.substring(0,1)=="SJ"){
+		if (sectionId.substring(0,1).equalsIgnoreCase("sj")){
 			campus = "Saint John";
 		}
-		else if (sectionId.substring(0,1)=="FR"){
+		else if (sectionId.substring(0,1).equalsIgnoreCase("fr")){
 			campus = "Fredericton";
 		}
 		else System.out.println("not supported campus");
