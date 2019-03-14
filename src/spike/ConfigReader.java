@@ -7,6 +7,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * this class reads configuration - area
+ */
+
 public class ConfigReader {
 
     public static void main(String[] args) {
@@ -18,7 +22,6 @@ public class ConfigReader {
         Scanner scanner;
 
         ArrayList<String> arealist = new ArrayList<>();
-        ArrayList<ArrayList<String>> courseList = new ArrayList<>();
 
         try {
             fr = new FileReader(FILENAME);
@@ -29,13 +32,35 @@ public class ConfigReader {
             while ((sCurrentLine = br.readLine()) != null) {
                 if (!sCurrentLine.isEmpty()) {
                     scanner = new Scanner(sCurrentLine);
-                    if (!scanner.hasNext("0-9")){
-                        arealist.add(scanner.next());
-                    }
-                    System.out.println(arealist);
-                }
+                    String str = scanner.next();
 
+                    if (!str.matches(".*\\d.*")){
+                        arealist.add(str);
+                    }
+                }
             }
+            ArrayList<ArrayList<String>> courseList = new ArrayList<>();
+
+            fr = new FileReader(FILENAME);
+            br = new BufferedReader(fr);
+
+            ArrayList<String> temp = new ArrayList<>();
+
+            while ((sCurrentLine = br.readLine()) != null) {
+                if (!sCurrentLine.isEmpty()) {
+                    if (arealist.contains(sCurrentLine)){
+                        if (!temp.isEmpty()) {
+                            //System.out.println(temp);
+                            courseList.add(temp);
+                        }
+                        temp = new ArrayList<>();
+                    }
+                    else temp.add(sCurrentLine);
+                }
+            }
+
+            System.out.println(arealist);//read the areaList, find the index, and use the index in courseList to find the match course
+            System.out.println(courseList);//2d arrayList for courseList
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
