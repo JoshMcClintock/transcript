@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * this class reads configuration - area
+ * this class reads configuration
  */
 
 public class ConfigReader {
@@ -83,7 +83,6 @@ public class ConfigReader {
             br = new BufferedReader(fr);
 
             String sCurrentLine;
-            String str;
             while ((sCurrentLine = br.readLine()) != null) {
                 temp = new ArrayList<>();
                 String[] array = sCurrentLine.split("\\s");
@@ -130,7 +129,6 @@ public class ConfigReader {
         readConfig("area","area.txt");
         readConfig("equivalencies","equivalencies.txt");
         readConfig("level","level.txt");
-        readConfig("transcript","transcript.txt");
 
         System.out.println(courseListPerArea);
         System.out.println(equivalencies);
