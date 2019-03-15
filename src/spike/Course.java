@@ -5,11 +5,13 @@ public class Course {
 	private String courseNumber;
 	private Section section;
 	private double creditHours;
+	private String grade;
 
-	public Course(String courseNum, Section section, double creditHours){
+	public Course(String courseNum, Section section, double creditHours, String grade){
 		this.courseNumber = courseNum;
 		this.section = section;
 		this.creditHours = creditHours;
+		this.grade = grade;
 	}
 
 	public String getCourseNumber() {
@@ -34,6 +36,10 @@ public class Course {
 
 	public void setCreditHours(double creditHours) {
 		this.creditHours = creditHours;
+	}
+
+	public String toString(){
+		return courseNumber + "\t" + section.getSectionId() + "\t" + grade + "\t" + creditHours + "\t" + section.getTerm();
 	}
 
 }

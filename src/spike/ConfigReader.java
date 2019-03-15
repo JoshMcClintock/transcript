@@ -21,8 +21,8 @@ public class ConfigReader {
 
     static Transcript transcript = new Transcript();
     static ArrayList<ArrayList<String>> equivalencies = new ArrayList<>();
-    static ArrayList<String> areaType = new ArrayList<>();
     static ArrayList<ArrayList<String>> courseListPerArea = new ArrayList<>();
+    static ArrayList<ArrayList<String>> level = new ArrayList<>();
 
     public static void readTranscript(String fileName){
         try {
@@ -43,7 +43,6 @@ public class ConfigReader {
                         if (!s.isEmpty())
                             arrayList.add(s);
                     }
-
                     // Create objects
                     String courseNum = arrayList.get(0);
                     String sectionId = arrayList.get(1);
@@ -52,13 +51,11 @@ public class ConfigReader {
                     String term = arrayList.get(arrayList.size() - 1);
 
                     Section s = new Section(sectionId, term);
-                    Course c = new Course(courseNum, s, Double.parseDouble(ch));
-                    CourseResult cr = new CourseResult(c, grade);
-                    transcript.addCourseResult(cr);
+                    Course c = new Course(courseNum, s, Double.parseDouble(ch), grade);
+                    transcript.addCourse(c);
                 }
             }
             //print the transcript to see if any bug here
-            //System.out.println(transcript);
             bw.write(transcript.toString()); //print something to file now
         } catch (IOException e) {
             e.printStackTrace();
@@ -76,62 +73,11 @@ public class ConfigReader {
                 ex.printStackTrace();
             }
         }
-
     }
 
 
-    public static void readArea(String fileName){
-        try {
-            fr = new FileReader(fileName);
-            br = new BufferedReader(fr);
-
-            String sCurrentLine;
-
-            while ((sCurrentLine = br.readLine()) != null) {
-                if (!sCurrentLine.isEmpty()) {
-                    if (!sCurrentLine.matches(".*\\d.*")){
-                        areaType.add(sCurrentLine);
-                    }
-                }
-            }
-
-            fr = new FileReader(fileName);
-            br = new BufferedReader(fr);
-
-            ArrayList<String> temp = new ArrayList<>();
-
-            while ((sCurrentLine = br.readLine()) != null) {
-                if (!sCurrentLine.isEmpty()) {
-                    if (areaType.contains(sCurrentLine)){
-                        if (!temp.isEmpty()) {
-                            //System.out.println(temp);
-                            courseListPerArea.add(temp);
-                        }
-                        temp = new ArrayList<>();
-                    }
-                    else temp.add(sCurrentLine);
-                }
-            }
-
-            System.out.println(areaType);//read the areaList, find the index, and use the index in courseListPerArea to find the match course
-            System.out.println(courseListPerArea);//2d arrayList for courseListPerArea
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (br != null)
-                    br.close();
-                if (fr != null)
-                    fr.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
-    public static void readEquivalencies(String fileName){
+    public static void readConfig(String type, String fileName){
         ArrayList<String> temp;
-
         try {
             fr = new FileReader(fileName);
             br = new BufferedReader(fr);
@@ -140,17 +86,21 @@ public class ConfigReader {
             String str;
             while ((sCurrentLine = br.readLine()) != null) {
                 temp = new ArrayList<>();
-                str = sCurrentLine.replaceAll("\\s", ",");
-                String[] array = str.split("\\,");
+                String[] array = sCurrentLine.split("\\s");
                 for (String s : array) {
                         temp.add(s);
                 }
-                equivalencies.add(temp);
+                if (type.equalsIgnoreCase("equivalencies"))
+                    equivalencies.add(temp);
+                else if (type.equalsIgnoreCase( "level"))
+                    level.add(temp);
+                else if (type.equalsIgnoreCase("area"))
+                    courseListPerArea.add(temp);
+                else System.out.println("unsupported type: " + type);
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            System.out.println(equivalencies); //test if it works
             try {
                 if (br != null)
                     br.close();
@@ -174,13 +124,21 @@ public class ConfigReader {
         return courseListPerArea;
     }
 
-    public static ArrayList<String> getAreaType(){
-        return areaType;
-    }
-
+    /** THIS IS FOR TESTING THE FUNCTION */
     public static void main(String[] args) {
         readTranscript("transcript.txt");
-        readArea("area.txt");
-        readEquivalencies("equivalencies.txt");
+        readConfig("area","area.txt");
+        readConfig("equivalencies","equivalencies.txt");
+        readConfig("level","level.txt");
+        readConfig("transcript","transcript.txt");
+
+        System.out.println(courseListPerArea);
+        System.out.println(equivalencies);
+        System.out.println(level);
+        System.out.println(transcript.getCourseResults().get(0).getSection().getYear());
+        System.out.println(transcript.getCourseResults().get(0).getSection().getCampus());
+        System.out.println(transcript.getYearOfStudy());
+        System.out.println(transcript.getTranscriptID());
+        System.out.println(transcript.getCourseResults().get(0).getSection().getTerm());
     }
 }
