@@ -76,8 +76,9 @@ public class ConfigReader {
     }
 
 
-    public static void readConfig(String type, String fileName){
+    public static void readConfig(String type){
         ArrayList<String> temp;
+        String fileName = type + ".txt";
         try {
             fr = new FileReader(fileName);
             br = new BufferedReader(fr);
@@ -126,9 +127,9 @@ public class ConfigReader {
     /** THIS IS FOR TESTING THE FUNCTION */
     public static void main(String[] args) {
         readTranscript("transcript.txt");
-        readConfig("area","area.txt");
-        readConfig("equivalencies","equivalencies.txt");
-        readConfig("level","level.txt");
+        readConfig("area");
+        readConfig("equivalencies");
+        readConfig("level");
 
         System.out.println(courseListPerArea);
         System.out.println(equivalencies);
