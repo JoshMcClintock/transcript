@@ -25,5 +25,3 @@
   SOCI2534   FRE1C  TECH & SOCIAL CHANGE                        B       3.00      2013/SM
 
   SPAN1203   FR01A  INTROD'Y SPANISH I                          A-      3.00      2011/FA
-  
-  STAT2593   FR01A  PROB. & STAT. FOR ENGINEERS                 B+      3.00      2011/FA

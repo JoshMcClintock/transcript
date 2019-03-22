@@ -41,10 +41,10 @@ public class ConfigReader {
                         if (!s.isEmpty())
                             arrayList.add(s);
                     }
-                    //System.out.println(arrayList);
+                    System.out.println(arrayList);
                     // Create objects
                     String courseNum = arrayList.get(0);
-                    System.out.println(courseNum);
+//                    System.out.println(courseNum);
                     String sectionId = arrayList.get(1);
                     String grade = arrayList.get(arrayList.size() - 3);
                     String ch = arrayList.get(arrayList.size() - 2);
