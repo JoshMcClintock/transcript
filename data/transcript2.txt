@@ -1,0 +1,40 @@
+  APSC1023   FR01B  MECHANICS II                                B-      5.00      2015/WI          
+  APSC2023   FR01B  SURVEY 19TH & 20TH C PHYSICS                B+      3.00      2016/WI          
+  APSC2028   FR01B  SURVEY OF 19TH/20TH C. PHY LAB              A+      2.00      2016/WI
+
+  CE3963     FR01B  ENGINEERING ECONOMY                         B       3.00      2018/WI
+
+  CHE2501    FR01A  GENERAL MATERIALS SCIENCE                   A       3.00      2015/FA
+
+  CHEM1882   FR02B  GEN CHEM/PHYSICAL & INORGANIC               A+      5.00      2015/WI
+
+  CMPE2412   FR01B  SIMULATION & ENG. ANALYSIS                  A-      4.00      2016/WI
+
+  CS1003     FR01A  INTRO COMPUTER PROGRAMMING                  B+      4.00      2014/FA          
+  CS1023     FR01B  DATA STRUCTURES & ALGORITHMS                A       4.00      2015/WI
+
+  ECE3031    FR01A  ELECTRICAL & CMPE ENG DESIGN                A-      4.00      2016/FA          
+  ECE3111    FR02A  ELECTRONICS I                               AUD     0.00      2016/FA          
+  ECE3122    FR01B  ELECTRONICS II                              B+      4.00      2017/WI          
+  ECE3221    FR01A  COMPUTER ORGANIZATION                       D       4.00      2016/FA          
+  ECE3511    FR02A  SIGNALS                                     C       4.00      2016/FA          
+  ECE3821    FR01A  ELECTROMAGNETICS I                          B       4.00      2016/FA
+
+  ECON1023   FR01A  INTRO ECON: MACRO                           A+      3.00      2015/SM         
+  EE2711     FR01A  ELECTRIC CIRCUITS                           AUD     0.00      2015/FA          
+  EE2722     FR01B  CIRCUITS AND SYSTEMS                        B+      4.00      2016/WI
+
+  ESL1301    FR04A  ENGLISH SUPPORT I                           B+      0.00      2013/FA         
+  ESL1302    FR04A  ENGLISH SUPPORT II                          A-      0.00      2014/WI          
+  ESL1303    FR04A  ENGLISH SUPPORT III                         B+      0.00      2014/FA
+
+  MATH1013   FR02B  INTRO TO CALCULUS II                        A       3.00      2015/WI          
+  MATH1503   FR01A  INTRO TO LINEAR ALGEBRA                     A       3.00      2014/FA          
+  MATH2513   FR01A  MULTIVARIATE CALCULUS FOR ENG.              A       4.00      2015/FA
+
+  SOCI1001   FR01A  INTRODUCTION TO SOCIOLOGY I                 A-      3.00      2015/SM          
+  SOCI2534   FRE1C  TECH & SOCIAL CHANGE                        B       3.00      2015/SM
+
+  SPAN1203   FR01A  INTROD'Y SPANISH I                          A-      3.00      2014/FA
+
+  STAT2593   FR01A  PROB. & STAT. FOR ENGINEERS                 B+      3.00      2015/FA
