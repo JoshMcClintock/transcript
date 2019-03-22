@@ -5,6 +5,7 @@ public class Section {
 	private String sectionId;
 	private String campus;
 	private String term;
+	private int year;
 
 	public Section(String sectionId, String term){
 		this.sectionId = sectionId;
@@ -15,22 +16,22 @@ public class Section {
 		return sectionId;
 	}
 
+	public int getYear(){
+		return Integer.parseInt(term.substring(0,4));
+	}
+
 	public void setSectionId(String sectionId) {
 		this.sectionId = sectionId;
 	}
 
 	public String getCampus() {
-		return campus;
-	}
-
-	public void setCampus(String sectionId) {
-		if (sectionId.substring(0,1).equalsIgnoreCase("sj")){
-			campus = "Saint John";
+		if (sectionId.substring(0,2).equalsIgnoreCase("sj")){
+			return campus = "Saint John";
 		}
-		else if (sectionId.substring(0,1).equalsIgnoreCase("fr")){
-			campus = "Fredericton";
+		else if (sectionId.substring(0,2).equalsIgnoreCase("fr")){
+			return campus = "Fredericton";
 		}
-		else System.out.println("not supported campus");
+		else return "unsupported campus";
 	}
 
 	public String getTerm() {
