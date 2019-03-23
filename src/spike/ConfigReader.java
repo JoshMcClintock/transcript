@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -19,7 +20,7 @@ public class ConfigReader {
     static FileWriter fw = null;
 
     static ArrayList<ArrayList<String>> equivalencies = new ArrayList<>();
-    static ArrayList<ArrayList<String>> courseListPerArea = new ArrayList<>();
+    static ArrayList<ArrayList<String>> area = new ArrayList<>();
     static ArrayList<ArrayList<String>> level = new ArrayList<>();
     static ArrayList<Transcript> transcripts = new ArrayList<>();
 
@@ -99,7 +100,7 @@ public class ConfigReader {
                 else if (type.equalsIgnoreCase( "level"))
                     level.add(temp);
                 else if (type.equalsIgnoreCase("area"))
-                    courseListPerArea.add(temp);
+                    area.add(temp);
                 else System.out.println("unsupported type: " + type);
             }
         } catch (IOException e) {
@@ -120,8 +121,12 @@ public class ConfigReader {
         return equivalencies;
     }
 
-    public static ArrayList<ArrayList<String>> getCourseListPerArea(){
-        return courseListPerArea;
+    public static ArrayList<ArrayList<String>> getArea(){
+        return area;
+    }
+
+    public static ArrayList<ArrayList<String>> getLevel(){
+        return level;
     }
 
     public static ArrayList<Transcript> getTranscripts(){
@@ -139,7 +144,7 @@ public class ConfigReader {
         readConfig("equivalencies");
         readConfig("level");
 
-        System.out.println(courseListPerArea);
+        System.out.println(area);
         System.out.println(equivalencies);
         System.out.println(level);
 //        System.out.println(transcripts.get(1).getCourses().get(7).toString());
@@ -151,5 +156,7 @@ public class ConfigReader {
 
         System.out.println(AnalyzeTranscript.countNumberOfStudentPerYear(2011));
         System.out.println(AnalyzeTranscript.countNumberOfStudentPerYearPerCourse(2011, "STAT2593"));
+        System.out.println(AnalyzeTranscript.getCoursesPerArea("math"));
+        System.out.println(AnalyzeTranscript.getGradeDistributionPerArea("math"));
     }
 }
