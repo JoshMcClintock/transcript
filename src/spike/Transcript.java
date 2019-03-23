@@ -5,14 +5,14 @@ import java.util.ArrayList;
 public class Transcript {
 
 	private static int transcriptID = 0; //actually student id
-	private ArrayList<Course> courseResults = new ArrayList<>();
+	private ArrayList<Course> courses = new ArrayList<>();
 
 	public Transcript() {
 		transcriptID++;
 	}
 
 	public void addCourse(Course c) {
-		courseResults.add(c);
+		courses.add(c);
 	}
 
 	public int getTranscriptID() {
@@ -21,7 +21,7 @@ public class Transcript {
 
 	public int getYearOfStudy(){
 		double totalCH = 0;
-		for (Course c : courseResults){
+		for (Course c : courses){
 			totalCH += c.getCreditHours();
 		}
 		if (totalCH <= 24){
@@ -36,14 +36,14 @@ public class Transcript {
 		else return 4;
 	}
 
-	public ArrayList<Course> getCourseResults(){
-		return courseResults;
+	public ArrayList<Course> getCourses(){
+		return courses;
 	}
 
 	@Override
 	public String toString() {
 		String str = "";
-		for (Course c : courseResults) {
+		for (Course c : courses) {
 			str += c + "\n";
 		}
 		return str;
