@@ -149,7 +149,7 @@ public class ConfigReader {
 //        System.out.println(transcripts.get(1).getTranscriptID());
 //        System.out.println(transcripts.get(1).getCourses().get(7).getSection().getTerm());
 
-        System.out.println(transcripts.size());
-        System.out.println(AnalyzeTranscript.countNumberOfStudentPerYear(2017));
+        System.out.println(AnalyzeTranscript.countNumberOfStudentPerYear(2011));
+        System.out.println(AnalyzeTranscript.countNumberOfStudentPerYearPerCourse(2011, "STAT2593"));
     }
 }
