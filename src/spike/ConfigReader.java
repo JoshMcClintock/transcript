@@ -24,13 +24,11 @@ public class ConfigReader {
     static ArrayList<ArrayList<String>> courseListPerArea = new ArrayList<>();
     static ArrayList<ArrayList<String>> level = new ArrayList<>();
 
-    public static void readTranscript(String fileName){
+    public static void readTranscript(int i){
         try {
+            String fileName = "data/transcript"+i+".txt";
             fr = new FileReader(fileName);
             br = new BufferedReader(fr);
-
-            fw = new FileWriter("result.txt");
-            bw = new BufferedWriter(fw);
 
             String sCurrentLine;
 
@@ -43,8 +41,10 @@ public class ConfigReader {
                         if (!s.isEmpty())
                             arrayList.add(s);
                     }
+                    System.out.println(arrayList);
                     // Create objects
                     String courseNum = arrayList.get(0);
+//                    System.out.println(courseNum);
                     String sectionId = arrayList.get(1);
                     String grade = arrayList.get(arrayList.size() - 3);
                     String ch = arrayList.get(arrayList.size() - 2);
@@ -55,6 +55,10 @@ public class ConfigReader {
                     transcript.addCourse(c);
                 }
             }
+
+            fileName = "output/result"+i+".txt";
+            fw = new FileWriter(fileName);
+            bw = new BufferedWriter(fw);
             //print the transcript to see if any bug here
             bw.write(transcript.toString()); //print something to file now
         } catch (IOException e) {
@@ -78,7 +82,7 @@ public class ConfigReader {
 
     public static void readConfig(String type){
         ArrayList<String> temp;
-        String fileName = type + ".txt";
+        String fileName = "config/" + type + ".txt";
         try {
             fr = new FileReader(fileName);
             br = new BufferedReader(fr);
@@ -126,7 +130,11 @@ public class ConfigReader {
 
     /** THIS IS FOR TESTING THE FUNCTION */
     public static void main(String[] args) {
-        readTranscript("transcript.txt");
+
+        readTranscript(1);
+        readTranscript(2);
+        readTranscript(3);
+        readTranscript(4);
         readConfig("area");
         readConfig("equivalencies");
         readConfig("level");
