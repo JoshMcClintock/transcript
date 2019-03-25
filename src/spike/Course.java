@@ -38,6 +38,10 @@ public class Course {
 		this.creditHours = creditHours;
 	}
 
+	public String getGrade(){
+		return grade;
+	}
+
 	public String toString(){
 		return courseNumber + "\t" + section.getSectionId() + "\t" + grade + "\t" + creditHours + "\t" + section.getTerm();
 	}

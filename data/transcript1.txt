@@ -1,0 +1,16 @@
+  APSC1023   SJ01B  MECHANICS II                                B-      5.00      2011/WI
+
+  CHEM1882   SJ02B  GEN CHEM/PHYSICAL & INORGANIC               A+      5.00      2011/WI
+
+  CS1003     SJ01A  INTRO COMPUTER PROGRAMMING                  B+      4.00      2010/FA          
+  CS1023     SJ01B  DATA STRUCTURES & ALGORITHMS                A       4.00      2011/WI
+
+  ECON1023   SJ01A  INTRO ECON: MACRO                           A+      3.00      2011/SP
+
+  ESL1301    SJ04A  ENGLISH SUPPORT I                           B+      0.00      2010/FA          
+  ESL1302    SJ04A  ENGLISH SUPPORT II                          A-      0.00      2010/FA          
+  ESL1303    SJ04A  ENGLISH SUPPORT III                         B+      0.00      2010/FA
+
+  MATH1013   SJ02B  INTRO TO CALCULUS II                        A       3.00      2011/WI
+
+  SOCI1001   SJ01A  INTRODUCTION TO SOCIOLOGY I                 A-      3.00      2011/SP
