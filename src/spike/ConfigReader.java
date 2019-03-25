@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -17,15 +18,16 @@ public class ConfigReader {
     static FileReader fr = null;
     static BufferedWriter bw = null;
     static FileWriter fw = null;
-    static Scanner scanner = null;
 
-    static Transcript transcript = new Transcript();
     static ArrayList<ArrayList<String>> equivalencies = new ArrayList<>();
-    static ArrayList<ArrayList<String>> courseListPerArea = new ArrayList<>();
+    static ArrayList<ArrayList<String>> area = new ArrayList<>();
     static ArrayList<ArrayList<String>> level = new ArrayList<>();
+    static ArrayList<Transcript> transcripts = new ArrayList<>();
 
     public static void readTranscript(int i){
         try {
+            Transcript transcript = new Transcript();
+
             String fileName = "data/transcript"+i+".txt";
             fr = new FileReader(fileName);
             br = new BufferedReader(fr);
@@ -41,10 +43,8 @@ public class ConfigReader {
                         if (!s.isEmpty())
                             arrayList.add(s);
                     }
-                    System.out.println(arrayList);
                     // Create objects
                     String courseNum = arrayList.get(0);
-//                    System.out.println(courseNum);
                     String sectionId = arrayList.get(1);
                     String grade = arrayList.get(arrayList.size() - 3);
                     String ch = arrayList.get(arrayList.size() - 2);
@@ -61,6 +61,7 @@ public class ConfigReader {
             bw = new BufferedWriter(fw);
             //print the transcript to see if any bug here
             bw.write(transcript.toString()); //print something to file now
+            transcripts.add(transcript);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -99,7 +100,7 @@ public class ConfigReader {
                 else if (type.equalsIgnoreCase( "level"))
                     level.add(temp);
                 else if (type.equalsIgnoreCase("area"))
-                    courseListPerArea.add(temp);
+                    area.add(temp);
                 else System.out.println("unsupported type: " + type);
             }
         } catch (IOException e) {
@@ -116,16 +117,20 @@ public class ConfigReader {
         }
     }
 
-    public static Transcript getTranscript(){
-        return transcript;
-    }
-
     public static ArrayList<ArrayList<String>> getEquivalencies(){
         return equivalencies;
     }
 
-    public static ArrayList<ArrayList<String>> getCourseListPerArea(){
-        return courseListPerArea;
+    public static ArrayList<ArrayList<String>> getArea(){
+        return area;
+    }
+
+    public static ArrayList<ArrayList<String>> getLevel(){
+        return level;
+    }
+
+    public static ArrayList<Transcript> getTranscripts(){
+        return transcripts;
     }
 
     /** THIS IS FOR TESTING THE FUNCTION */
@@ -139,13 +144,19 @@ public class ConfigReader {
         readConfig("equivalencies");
         readConfig("level");
 
-        System.out.println(courseListPerArea);
+        System.out.println(area);
         System.out.println(equivalencies);
         System.out.println(level);
-        System.out.println(transcript.getCourseResults().get(0).getSection().getYear());
-        System.out.println(transcript.getCourseResults().get(0).getSection().getCampus());
-        System.out.println(transcript.getYearOfStudy());
-        System.out.println(transcript.getTranscriptID());
-        System.out.println(transcript.getCourseResults().get(0).getSection().getTerm());
+//        System.out.println(transcripts.get(1).getCourses().get(7).toString());
+//        System.out.println(transcripts.get(1).getCourses().get(7).getSection().getYear());
+//        System.out.println(transcripts.get(1).getCourses().get(7).getSection().getCampus());
+//        System.out.println(transcripts.get(1).getYearOfStudy());
+//        System.out.println(transcripts.get(1).getTranscriptID());
+//        System.out.println(transcripts.get(1).getCourses().get(7).getSection().getTerm());
+
+        System.out.println(AnalyzeTranscript.countNumberOfStudentPerYear(2011));
+        System.out.println(AnalyzeTranscript.countNumberOfStudentPerYearPerCourse(2011, "STAT2593"));
+        System.out.println(AnalyzeTranscript.getCoursesPerArea("math"));
+        System.out.println(AnalyzeTranscript.getGradeDistributionPerArea("math"));
     }
 }

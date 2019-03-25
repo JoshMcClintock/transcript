@@ -3,9 +3,7 @@ package spike;
 public class Section {
 
 	private String sectionId;
-	private String campus;
 	private String term;
-	private int year;
 
 	public Section(String sectionId, String term){
 		this.sectionId = sectionId;
@@ -26,10 +24,10 @@ public class Section {
 
 	public String getCampus() {
 		if (sectionId.substring(0,2).equalsIgnoreCase("sj")){
-			return campus = "Saint John";
+			return "Saint John";
 		}
 		else if (sectionId.substring(0,2).equalsIgnoreCase("fr")){
-			return campus = "Fredericton";
+			return "Fredericton";
 		}
 		else return "unsupported campus";
 	}
