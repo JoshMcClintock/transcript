@@ -144,6 +144,9 @@ public class ConfigReader {
         readConfig("equivalencies");
         readConfig("level");
 
+        MasterList ml = new MasterList();
+        ml.create(transcripts);
+       
         System.out.println(area);
         System.out.println(equivalencies);
         System.out.println(level);
@@ -156,7 +159,10 @@ public class ConfigReader {
 
         System.out.println(AnalyzeTranscript.countNumberOfStudentPerYear(2011));
         System.out.println(AnalyzeTranscript.countNumberOfStudentPerYearPerCourse(2011, "STAT2593"));
-        System.out.println(AnalyzeTranscript.getCoursesPerArea("math"));
-        System.out.println(AnalyzeTranscript.getGradeDistributionPerArea("math"));
+        //System.out.println(AnalyzeTranscript.getCoursesPerArea("math"));
+        //System.out.println(AnalyzeTranscript.getGradeDistributionPerArea("math"));
+        for(int i = 0; i < ml.getMasterList().size(); i++) {
+        	System.out.println(ml.getMasterList().get(i));
+        }
     }
 }
