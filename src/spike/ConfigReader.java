@@ -62,14 +62,7 @@ public class ConfigReader {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (br != null)
-                    br.close();
-                if (fr != null)
-                    fr.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            close();
         }
     }
 
@@ -98,14 +91,18 @@ public class ConfigReader {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (br != null)
-                    br.close();
-                if (fr != null)
-                    fr.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            close();
+        }
+    }
+
+    private static void close(){
+        try {
+            if (br != null)
+                br.close();
+            if (fr != null)
+                fr.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -154,12 +151,15 @@ public class ConfigReader {
 //        System.out.println(transcripts.get(1).getTranscriptID());
 //        System.out.println(transcripts.get(1).getCourses().get(7).getSection().getTerm());
 
-        System.out.println(AnalyzeTranscript.countNumberOfStudentPerYearPerCourse(2011, "STAT2593"));
-        System.out.println(AnalyzeTranscript.getCoursesPerArea(2011,"math"));
-        System.out.println(AnalyzeTranscript.getGradeDistributionPerArea(2011,"math"));
-//        System.out.println(MasterList.createMasterList(2011));
-        System.out.println(AnalyzeTranscript.getGradeDistributionPerCourse(2011, "STAT2593"));
-        System.out.println(AnalyzeTranscript.getGradeDistributionPerCohort(2011));
-        System.out.println(AnalyzeTranscript.getGradeDistributionForEveryArea(2011));
+//        System.out.println(AnalyzeTranscript.countNumberOfStudentPerYearPerCourse(2011, "STAT2593"));
+//        System.out.println(AnalyzeTranscript.getCoursesPerArea(2011,"math"));
+//        System.out.println(AnalyzeTranscript.getGradeDistributionPerArea(2011,"math"));
+//        System.out.println(OutputWriter.writeMasterList(2011));
+//        System.out.println(AnalyzeTranscript.getGradeDistributionPerCourse(2011, "STAT2593"));
+//        System.out.println(AnalyzeTranscript.getGradeDistributionPerCohort(2011));
+//        System.out.println(AnalyzeTranscript.getGradeDistributionForEveryArea(2011));
+        OutputWriter.writeDistributionPerArea(2011);
+        OutputWriter.writeDistributionPerCourse(2011);
+        OutputWriter.writeMasterList(2011);
     }
 }

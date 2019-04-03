@@ -135,9 +135,23 @@ public class AnalyzeTranscript {
         return gradeDistribution;
     }
 
+    public static ArrayList<String> createMasterList(int year) {
+        ArrayList<String> masterlist = new ArrayList<>();
+        ArrayList<Transcript> transcripts = ConfigReader.getTranscripts(year);
+        for (Transcript transcript : transcripts) {
+            for (Course course : transcript.getCourses()) {
+                String courseNum = course.getCourseNumber();
+                if (!masterlist.contains(courseNum) && !courseNum.isEmpty()) {
+                    masterlist.add(courseNum);
+                }
+            }
+        }
+        return masterlist;
+    }
+
     public static ArrayList<ArrayList<Integer>> getGradeDistributionPerCohort(int year){
         ArrayList<ArrayList<Integer>> gradeDistributionPerCohort = new ArrayList<>();
-        for (String courseNum : MasterList.createMasterList(year)){
+        for (String courseNum : createMasterList(year)){
             gradeDistributionPerCohort.add(getGradeDistributionPerCourse(year,courseNum));
         }
         return gradeDistributionPerCohort;
