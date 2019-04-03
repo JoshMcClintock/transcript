@@ -2,11 +2,11 @@ package spike;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
 
 /**
  * this class reads configuration
@@ -14,7 +14,10 @@ import java.util.*;
 
 public class ConfigReader {
 
-    static BufferedReader br = null;
+    private static File transcriptDirectory;
+    private static File outputDirectory;
+    
+	static BufferedReader br = null;
     static FileReader fr = null;
     static BufferedWriter bw = null;
     static FileWriter fw = null;
@@ -24,59 +27,67 @@ public class ConfigReader {
     static ArrayList<ArrayList<String>> level = new ArrayList<>();
     static ArrayList<Transcript> transcripts = new ArrayList<>();
 
-    public static void readTranscript(int i){
-        try {
-            Transcript transcript = new Transcript();
-
-            String fileName = "data/transcript"+i+".txt";
-            fr = new FileReader(fileName);
-            br = new BufferedReader(fr);
-
-            String sCurrentLine;
-
-            while ((sCurrentLine = br.readLine()) != null) {
-                if (!sCurrentLine.isEmpty()) {
-                    String str = sCurrentLine.replaceAll("\\s", ",");
-                    String[] array = str.split("\\,");
-                    ArrayList<String> arrayList = new ArrayList<>();
-                    for (String s : array) {
-                        if (!s.isEmpty())
-                            arrayList.add(s);
-                    }
-                    // Create objects
-                    String courseNum = arrayList.get(0);
-                    String sectionId = arrayList.get(1);
-                    String grade = arrayList.get(arrayList.size() - 3);
-                    String ch = arrayList.get(arrayList.size() - 2);
-                    String term = arrayList.get(arrayList.size() - 1);
-
-                    Section s = new Section(sectionId, term);
-                    Course c = new Course(courseNum, s, Double.parseDouble(ch), grade);
-                    transcript.addCourse(c);
-                }
-            }
-
-            fileName = "output/result"+i+".txt";
-            fw = new FileWriter(fileName);
-            bw = new BufferedWriter(fw);
-            //print the transcript to see if any bug here
-            bw.write(transcript.toString()); //print something to file now
-            transcripts.add(transcript);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (br != null)
-                    br.close();
-                if (fr != null)
-                    fr.close();
-                if (bw != null)
-                    bw.close();
-                if (fw != null)
-                    fw.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+    public static void readTranscripts(){
+        
+    	transcriptDirectory = new File("data/"); // Default directory 
+    	outputDirectory = new File("output/"); // Default directory
+       
+        File[] transcriptFiles = transcriptDirectory.listFiles();
+    	
+        for (int i = 0; i < transcriptFiles.length; i++) {
+	        
+	    	try {
+	    		File file = new File(transcriptFiles[i].getAbsolutePath());
+	            Transcript transcript = new Transcript();
+	            
+	            fr = new FileReader(file.getAbsolutePath());
+	            br = new BufferedReader(fr);
+	
+	            String sCurrentLine;
+	
+	            while ((sCurrentLine = br.readLine()) != null) {
+	                if (!sCurrentLine.isEmpty()) {
+	                    String str = sCurrentLine.replaceAll("\\s", ",");
+	                    String[] array = str.split("\\,");
+	                    ArrayList<String> arrayList = new ArrayList<>();
+	                    for (String s : array) {
+	                        if (!s.isEmpty())
+	                            arrayList.add(s);
+	                    }
+	                    // Create objects
+	                    String courseNum = arrayList.get(0);
+	                    String sectionId = arrayList.get(1);
+	                    String grade = arrayList.get(arrayList.size() - 3);
+	                    String ch = arrayList.get(arrayList.size() - 2);
+	                    String term = arrayList.get(arrayList.size() - 1);
+	
+	                    Section s = new Section(sectionId, term);
+	                    Course c = new Course(courseNum, s, Double.parseDouble(ch), grade);
+	                    transcript.addCourse(c);
+	                }
+	            }
+	
+	            fw = new FileWriter(outputDirectory.getAbsolutePath() + i + ".txt");
+	            bw = new BufferedWriter(fw);
+	            //print the transcript to see if any bug here
+	            bw.write(transcript.toString()); //print something to file now
+	            transcripts.add(transcript);
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        } finally {
+	            try {
+	                if (br != null)
+	                    br.close();
+	                if (fr != null)
+	                    fr.close();
+	                if (bw != null)
+	                    bw.close();
+	                if (fw != null)
+	                    fw.close();
+	            } catch (IOException ex) {
+	                ex.printStackTrace();
+	            }
+	        }
         }
     }
 
@@ -132,14 +143,28 @@ public class ConfigReader {
     public static ArrayList<Transcript> getTranscripts(){
         return transcripts;
     }
+    
+    public static void setTranscriptDirectory(File path) {
+    	transcriptDirectory = path;
+    }
+
+    public static File getTranscriptDirectory() {
+    	return transcriptDirectory;
+    }
+     
+    public static void setOutputDirectory(File path) {
+    	outputDirectory = path;
+    }
+    
+    public static File getOutputDirectory() {
+    	return outputDirectory;
+    }
 
     /** THIS IS FOR TESTING THE FUNCTION */
     public static void main(String[] args) {
 
-        readTranscript(1);
-        readTranscript(2);
-        readTranscript(3);
-        readTranscript(4);
+        readTranscripts();
+    
         readConfig("area");
         readConfig("equivalencies");
         readConfig("level");
