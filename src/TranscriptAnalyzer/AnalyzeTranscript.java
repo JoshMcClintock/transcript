@@ -1,4 +1,4 @@
-package spike;
+package TranscriptAnalyzer;
 
 import java.util.ArrayList;
 
@@ -156,4 +156,14 @@ public class AnalyzeTranscript {
         }
         return gradeDistributionPerCohort;
     }
+
+//    public static ArrayList<String> getMasterListWithEquilvance(int year) {
+//        for (String courseNum : createMasterList(year)){
+//            for (int i=0;i< ConfigReader.getEquivalencies().size();i++){
+//                if (courseNum.equalsIgnoreCase(ConfigReader.getEquivalencies().get(i).get(0))){
+//
+//                }
+//            }
+//        }
+//    }
 }

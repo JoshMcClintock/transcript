@@ -1,4 +1,4 @@
-package spike;
+package TranscriptAnalyzer;
 
 public class Course {
 

@@ -1,4 +1,6 @@
-package spike;
+package TranscriptAnalyzer;
+
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -29,15 +31,16 @@ public class OutputWriter {
 		try {
 			fw = new FileWriter("output/"+year+"/Distribution Per Area");
 			bw = new BufferedWriter(fw);
-			for (int i=0;i<ConfigReader.getLevel().get(0).size();i++){
-				bw.write(ConfigReader.getLevel().get(i).get(0)+"\t");
-			}
-			bw.write("others");
+			writeLevelIntoFile();
 			for (int i=0;i<distributionPerArea.size();i++){
 				bw.write("\n");
-				bw.write(ConfigReader.getArea().get(i).get(0)+"\t");
+				String temp = ConfigReader.getArea().get(i).get(0);
+				while (temp.length()<12){
+					temp += " ";
+				}
+				bw.write(temp+"\t");
 				for (int dis : distributionPerArea.get(i)) {
-					bw.write(dis + "\t");
+					bw.write(dis + "\t\t\t");
 				}
 			}
 		}
@@ -54,15 +57,16 @@ public class OutputWriter {
 		try {
 			fw = new FileWriter("output/"+year+"/Distribution Per Course");
 			bw = new BufferedWriter(fw);
-			for (int i=0;i<ConfigReader.getLevel().get(0).size();i++){
-				bw.write(ConfigReader.getLevel().get(i).get(0)+"\t");
-			}
-			bw.write("others");
+			writeLevelIntoFile();
 			for (int i=0;i<distributionPerCourse.size();i++){
 				bw.write("\n");
-				bw.write(AnalyzeTranscript.createMasterList(year).get(i)+"\t");
+				String temp = AnalyzeTranscript.createMasterList(year).get(i);
+				while (temp.length()<12){
+					temp += " ";
+				}
+				bw.write(temp+"\t");
 				for (int dis : distributionPerCourse.get(i)) {
-					bw.write(dis + "\t");
+					bw.write(dis + "\t\t\t");
 				}
 			}
 		}
@@ -72,6 +76,15 @@ public class OutputWriter {
 		finally {
 			close();
 		}
+	}
+
+	private static void writeLevelIntoFile() throws IOException {
+		bw.write("\t\t\t");
+		for (int i = 0; i< ConfigReader.getLevel().get(0).size()-1; i++){
+			bw.write("\t"+ConfigReader.getLevel().get(i).get(0)+"\t");
+		}
+		bw.write(ConfigReader.getLevel().get(ConfigReader.getLevel().get(0).size()-1).get(0));
+		bw.write("\t\tOthers");
 	}
 
 	private static void close(){

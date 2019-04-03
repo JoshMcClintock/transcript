@@ -1,4 +1,4 @@
-package spike;
+package TranscriptAnalyzer;
 
 import java.util.ArrayList;
 
