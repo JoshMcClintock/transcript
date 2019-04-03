@@ -1,21 +1,22 @@
 package TranscriptAnalyzer;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import java.io.*;
+import java.text.*;
 import java.util.ArrayList;
 
 public class OutputWriter {
 
-	static BufferedWriter bw = null;
-	static FileWriter fw = null;
+	private static BufferedWriter bw = null;
+	private static FileWriter fw = null;
+	private static NumberFormat formatter = new DecimalFormat("#0.00");
 	
 	public static void writeMasterList(int year){
-		ArrayList<String> masterlist = AnalyzeTranscript.createMasterList(year);
+		ArrayList<String> masterList = AnalyzeTranscript.createMasterList(year);
 		try {
 			fw = new FileWriter("output/"+year+"/Master List");
 			bw = new BufferedWriter(fw);
-			for (String str : masterlist)
+			for (String str : masterList)
 				bw.write(str+"\n");
 		}
 		catch (IOException e){
@@ -35,9 +36,7 @@ public class OutputWriter {
 			for (int i=0;i<distributionPerArea.size();i++){
 				bw.write("\n");
 				String temp = ConfigReader.getArea().get(i).get(0);
-				while (temp.length()<12){
-					temp += " ";
-				}
+                temp = formatItTo12Char(temp);
 				bw.write(temp+"\t");
 				for (int dis : distributionPerArea.get(i)) {
 					bw.write(dis + "\t\t\t");
@@ -61,9 +60,7 @@ public class OutputWriter {
 			for (int i=0;i<distributionPerCourse.size();i++){
 				bw.write("\n");
 				String temp = AnalyzeTranscript.createMasterList(year).get(i);
-				while (temp.length()<12){
-					temp += " ";
-				}
+		        temp = formatItTo12Char(temp);
 				bw.write(temp+"\t");
 				for (int dis : distributionPerCourse.get(i)) {
 					bw.write(dis + "\t\t\t");
@@ -77,6 +74,32 @@ public class OutputWriter {
 			close();
 		}
 	}
+
+	public static void writeGpaPerAreaPerTranscript(int year, int index){
+		ArrayList<Double> gpaPerAreaPerTranscript = AnalyzeTranscript.getAverageGradePerTranscriptForEachArea(year,index);
+		try{
+			fw = new FileWriter("output/"+year+"/GPA - Transcript" + index);
+			bw = new BufferedWriter(fw);
+			for (int i=0;i<gpaPerAreaPerTranscript.size();i++) {
+				String temp = ConfigReader.getArea().get(i).get(0);
+				temp = formatItTo12Char(temp);
+				bw.write(temp+"\t"+ formatter.format(gpaPerAreaPerTranscript.get(i))+"\n");
+			}
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		finally {
+			close();
+		}
+	}
+
+	private static String formatItTo12Char(String temp){
+        while (temp.length()<12){
+            temp += " ";
+        }
+        return temp;
+    }
 
 	private static void writeLevelIntoFile() throws IOException {
 		bw.write("\t\t\t");

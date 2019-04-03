@@ -23,11 +23,11 @@ public class AnalyzeTranscript {
     public static ArrayList<Course> getCoursesPerArea(int year, String area){
         ArrayList<Course> coursesPerArea = new ArrayList<>();
         ArrayList<Transcript> transcripts = ConfigReader.getTranscripts(year);
-        for (Transcript t : transcripts){
+        for (Transcript transcript : transcripts){
             for (int i=0;i<ConfigReader.getArea().size();i++){
                 if (area.equalsIgnoreCase(ConfigReader.getArea().get(i).get(0))){
                     for (String courseNum : ConfigReader.getArea().get(i)){
-                        for (Course c : t.getCourses()){
+                        for (Course c : transcript.getCourses()){
                             if (c.getCourseNumber().equalsIgnoreCase(courseNum)){
                                 coursesPerArea.add(c);
                             }
@@ -37,6 +37,23 @@ public class AnalyzeTranscript {
             }
         }
         return coursesPerArea;
+    }
+
+    public static ArrayList<Course> getCoursePerAreaPerTranscript(int year, String area, int index){
+        ArrayList<Course> coursesPerAreaPerTrancript = new ArrayList<>();
+        Transcript transcript = ConfigReader.getSingleTranscript(year, index);
+        for (int i=0;i<ConfigReader.getArea().size();i++){
+            if (area.equalsIgnoreCase(ConfigReader.getArea().get(i).get(0))){
+                for (String courseNum : ConfigReader.getArea().get(i)){
+                    for (Course c : transcript.getCourses()){
+                        if (c.getCourseNumber().equalsIgnoreCase(courseNum)){
+                            coursesPerAreaPerTrancript.add(c);
+                        }
+                    }
+                }
+            }
+        }
+        return coursesPerAreaPerTrancript;
     }
 
     public static ArrayList<Integer> getGradeDistributionPerArea(int year, String area){
@@ -135,18 +152,77 @@ public class AnalyzeTranscript {
         return gradeDistribution;
     }
 
+    public static double gpaPerAreaPerTranscript(int year,String area,int index){
+        ArrayList<Course> courses = getCoursePerAreaPerTranscript(year,area,index);
+        double gpa = 0;
+        for (Course course : courses){
+            double total = 0;
+            double totalCH = 0;
+            String letter = course.getGrade();
+            double point = 0;
+            double ch = course.getCreditHours();
+            switch(letter){
+                case "A+":
+                    point = 4.3;
+                    break;
+                case "A":
+                    point = 4.0;
+                    break;
+                case "A-":
+                    point = 3.7;
+                    break;
+                case "B+":
+                    point = 3.3;
+                    break;
+                case "B":
+                    point = 3.0;
+                    break;
+                case "B-":
+                    point = 2.7;
+                    break;
+                case "C+":
+                    point = 2.3;
+                    break;
+                case "C":
+                    point = 2.0;
+                    break;
+                case "D":
+                    point = 1.0;
+                    break;
+                case "F":
+                    point = 0.0;
+                    break;
+                default:
+                    break;
+            }
+            total += point*ch;
+            totalCH += ch;
+            gpa = total/totalCH;
+        }
+        return gpa;
+    }
+
+    public static ArrayList<Double> getAverageGradePerTranscriptForEachArea(int year, int index){
+        ArrayList<Double> averageGradePerTranscript = new ArrayList<>();
+        for (ArrayList<String> arrayList : ConfigReader.getArea()) {
+            String area = arrayList.get(0);
+            averageGradePerTranscript.add(gpaPerAreaPerTranscript(year, area, index));
+        }
+        return averageGradePerTranscript;
+    }
+
     public static ArrayList<String> createMasterList(int year) {
-        ArrayList<String> masterlist = new ArrayList<>();
+        ArrayList<String>  masterList = new ArrayList<>();
         ArrayList<Transcript> transcripts = ConfigReader.getTranscripts(year);
         for (Transcript transcript : transcripts) {
             for (Course course : transcript.getCourses()) {
                 String courseNum = course.getCourseNumber();
-                if (!masterlist.contains(courseNum) && !courseNum.isEmpty()) {
-                    masterlist.add(courseNum);
+                if (! masterList.contains(courseNum) && !courseNum.isEmpty()) {
+                     masterList.add(courseNum);
                 }
             }
         }
-        return masterlist;
+        return  masterList;
     }
 
     public static ArrayList<ArrayList<Integer>> getGradeDistributionPerCohort(int year){

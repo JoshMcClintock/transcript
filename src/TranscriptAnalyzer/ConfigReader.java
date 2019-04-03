@@ -16,53 +16,56 @@ public class ConfigReader {
     private static ArrayList<ArrayList<String>> area;
     private static ArrayList<ArrayList<String>> level;
     private static ArrayList<Transcript> transcripts;
+    private static Transcript transcript;
 
-
-    private static void readTranscript(int year) {
-        transcripts = new ArrayList<>();
-
+    public static Transcript getSingleTranscript(int year, int i) {
         try {
-            int count = countCohorts(year);
-            for (int i=1;i<=count;i++){
-                Transcript transcript = new Transcript();
-                String fileName = "data/"+year+"/transcript"+i+".txt";
-                fr = new FileReader(fileName);
-                br = new BufferedReader(fr);
+            transcript = new Transcript();
+            String fileName = "data/" + year + "/transcript" + i + ".txt";
+            fr = new FileReader(fileName);
+            br = new BufferedReader(fr);
 
-                String sCurrentLine;
+            String sCurrentLine;
 
-                while ((sCurrentLine = br.readLine()) != null) {
-                    if (!sCurrentLine.isEmpty()) {
-                        String str = sCurrentLine.replaceAll("\\s", ",");
-                        String[] array = str.split("\\,");
-                        ArrayList<String> arrayList = new ArrayList<>();
-                        for (String s : array) {
-                            if (!s.isEmpty())
-                                arrayList.add(s);
-                        }
-                        // Create objects
-                        String courseNum = arrayList.get(0);
-                        String sectionId = arrayList.get(1);
-                        String courseName = "";
-                        for (int j=2;j<arrayList.size()-3;j++){
-                            courseName += arrayList.get(j) + " ";
-                        }
-
-                        String grade = arrayList.get(arrayList.size() - 3);
-                        String ch = arrayList.get(arrayList.size() - 2);
-                        String term = arrayList.get(arrayList.size() - 1);
-
-                        Section s = new Section(sectionId, term);
-                        Course c = new Course(courseNum, courseName, s, Double.parseDouble(ch), grade);
-                        transcript.addCourse(c);
+            while ((sCurrentLine = br.readLine()) != null) {
+                if (!sCurrentLine.isEmpty()) {
+                    String str = sCurrentLine.replaceAll("\\s", ",");
+                    String[] array = str.split("\\,");
+                    ArrayList<String> arrayList = new ArrayList<>();
+                    for (String s : array) {
+                        if (!s.isEmpty())
+                            arrayList.add(s);
                     }
+                    // Create objects
+                    String courseNum = arrayList.get(0);
+                    String sectionId = arrayList.get(1);
+                    String courseName = "";
+                    for (int j = 2; j < arrayList.size() - 3; j++) {
+                        courseName += arrayList.get(j) + " ";
+                    }
+
+                    String grade = arrayList.get(arrayList.size() - 3);
+                    String ch = arrayList.get(arrayList.size() - 2);
+                    String term = arrayList.get(arrayList.size() - 1);
+
+                    Section s = new Section(sectionId, term);
+                    Course c = new Course(courseNum, courseName, s, Double.parseDouble(ch), grade);
+                    transcript.addCourse(c);
                 }
-                transcripts.add(transcript);
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             close();
+        }
+        return transcript;
+    }
+
+    private static void readTranscript(int year) {
+        transcripts = new ArrayList<>();
+        int count = countCohorts(year);
+        for (int i=1;i<=count;i++){
+            transcripts.add(getSingleTranscript(year,i));
         }
     }
 
@@ -161,5 +164,6 @@ public class ConfigReader {
         OutputWriter.writeDistributionPerArea(2011);
         OutputWriter.writeDistributionPerCourse(2011);
         OutputWriter.writeMasterList(2011);
+        OutputWriter.writeGpaPerAreaPerTranscript(2011,1);
     }
 }
