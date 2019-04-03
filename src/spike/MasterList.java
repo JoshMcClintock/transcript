@@ -1,58 +1,44 @@
 package spike;
 
+import java.io.*;
 import java.util.ArrayList;
-import java.util.*;
-
 
 public class MasterList {
+
+	static BufferedWriter bw = null;
+	static FileWriter fw = null;
 	
-	static ArrayList<String> masterlist;
-	static ArrayList<String> list;
-	
-	public MasterList() {
-		masterlist = new ArrayList<>();
-		list = new ArrayList<>();
-	}
-	
-	public void create(ArrayList<Transcript> transcripts) {
-		for(int i = 0; i < transcripts.size(); i++) { 
-			for(int j = 0; j < transcripts.get(i).getCourses().size(); j++) {
-						String temp = transcripts.get(i).getCourses().get(j).getCourseNumber();
-						list.add(temp);
-						
+	public static ArrayList<String> createMasterList(int year){
+		ArrayList<String> masterlist = new ArrayList<>();
+		ArrayList<Transcript> transcripts = ConfigReader.getTranscripts(year);
+		for (Transcript transcript : transcripts){
+			for (Course course : transcript.getCourses()){
+				String courseNum = course.getCourseNumber();
+				if (!masterlist.contains(courseNum) && !courseNum.isEmpty()){
+					masterlist.add(courseNum);
+				}
 			}
 		}
-		
-		for(int i = 0; i < list.size(); i++) {
-			if(!masterlist.contains(list.get(i))) {
-				masterlist.add(list.get(i));
+		try {
+			fw = new FileWriter("output/MasterList-" + year);
+			bw = new BufferedWriter(fw);
+			for (String str : masterlist)
+				bw.write(str+"\n");
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				if (bw != null)
+					bw.close();
+				if (fw != null)
+					fw.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
 			}
 		}
-		
-	}
-	
-	public ArrayList<String> getMasterList(){
 		return masterlist;
 	}
-	
-	@Override
-	public String toString() {
-		String temp = "";
-		
-		for(String c: masterlist) {
-			temp += c.toString();
-		}
-		return temp;
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

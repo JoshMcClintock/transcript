@@ -1,11 +1,6 @@
 package spike;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Array;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -14,54 +9,56 @@ import java.util.*;
 
 public class ConfigReader {
 
-    static BufferedReader br = null;
-    static FileReader fr = null;
-    static BufferedWriter bw = null;
-    static FileWriter fw = null;
+    private static BufferedReader br = null;
+    private static FileReader fr = null;
 
-    static ArrayList<ArrayList<String>> equivalencies = new ArrayList<>();
-    static ArrayList<ArrayList<String>> area = new ArrayList<>();
-    static ArrayList<ArrayList<String>> level = new ArrayList<>();
-    static ArrayList<Transcript> transcripts = new ArrayList<>();
+    private static ArrayList<ArrayList<String>> equivalencies;
+    private static ArrayList<ArrayList<String>> area;
+    private static ArrayList<ArrayList<String>> level;
+    private static ArrayList<Transcript> transcripts;
 
-    public static void readTranscript(int i){
+
+    private static void readTranscript(int year) {
+        transcripts = new ArrayList<>();
+
         try {
-            Transcript transcript = new Transcript();
+            int count = countCohorts(year);
+            for (int i=1;i<=count;i++){
+                Transcript transcript = new Transcript();
+                String fileName = "data/"+year+"/transcript"+i+".txt";
+                fr = new FileReader(fileName);
+                br = new BufferedReader(fr);
 
-            String fileName = "data/transcript"+i+".txt";
-            fr = new FileReader(fileName);
-            br = new BufferedReader(fr);
+                String sCurrentLine;
 
-            String sCurrentLine;
+                while ((sCurrentLine = br.readLine()) != null) {
+                    if (!sCurrentLine.isEmpty()) {
+                        String str = sCurrentLine.replaceAll("\\s", ",");
+                        String[] array = str.split("\\,");
+                        ArrayList<String> arrayList = new ArrayList<>();
+                        for (String s : array) {
+                            if (!s.isEmpty())
+                                arrayList.add(s);
+                        }
+                        // Create objects
+                        String courseNum = arrayList.get(0);
+                        String sectionId = arrayList.get(1);
+                        String courseName = "";
+                        for (int j=2;j<arrayList.size()-3;j++){
+                            courseName += arrayList.get(j) + " ";
+                        }
 
-            while ((sCurrentLine = br.readLine()) != null) {
-                if (!sCurrentLine.isEmpty()) {
-                    String str = sCurrentLine.replaceAll("\\s", ",");
-                    String[] array = str.split("\\,");
-                    ArrayList<String> arrayList = new ArrayList<>();
-                    for (String s : array) {
-                        if (!s.isEmpty())
-                            arrayList.add(s);
+                        String grade = arrayList.get(arrayList.size() - 3);
+                        String ch = arrayList.get(arrayList.size() - 2);
+                        String term = arrayList.get(arrayList.size() - 1);
+
+                        Section s = new Section(sectionId, term);
+                        Course c = new Course(courseNum, courseName, s, Double.parseDouble(ch), grade);
+                        transcript.addCourse(c);
                     }
-                    // Create objects
-                    String courseNum = arrayList.get(0);
-                    String sectionId = arrayList.get(1);
-                    String grade = arrayList.get(arrayList.size() - 3);
-                    String ch = arrayList.get(arrayList.size() - 2);
-                    String term = arrayList.get(arrayList.size() - 1);
-
-                    Section s = new Section(sectionId, term);
-                    Course c = new Course(courseNum, s, Double.parseDouble(ch), grade);
-                    transcript.addCourse(c);
                 }
+                transcripts.add(transcript);
             }
-
-            fileName = "output/result"+i+".txt";
-            fw = new FileWriter(fileName);
-            bw = new BufferedWriter(fw);
-            //print the transcript to see if any bug here
-            bw.write(transcript.toString()); //print something to file now
-            transcripts.add(transcript);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -70,18 +67,13 @@ public class ConfigReader {
                     br.close();
                 if (fr != null)
                     fr.close();
-                if (bw != null)
-                    bw.close();
-                if (fw != null)
-                    fw.close();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
     }
 
-
-    public static void readConfig(String type){
+    private static void readConfig(String type){
         ArrayList<String> temp;
         String fileName = "config/" + type + ".txt";
         try {
@@ -118,38 +110,43 @@ public class ConfigReader {
     }
 
     public static ArrayList<ArrayList<String>> getEquivalencies(){
+        equivalencies = new ArrayList<>();
+        readConfig("equivalencies");
         return equivalencies;
     }
 
     public static ArrayList<ArrayList<String>> getArea(){
+        area = new ArrayList<>();
+        readConfig("area");
         return area;
     }
 
     public static ArrayList<ArrayList<String>> getLevel(){
+        level = new ArrayList<>();
+        readConfig("level");
         return level;
     }
 
-    public static ArrayList<Transcript> getTranscripts(){
+    public static ArrayList<Transcript> getTranscripts(int year){
+        readTranscript(year);
         return transcripts;
+    }
+
+    /* number of cohort students in a certain year */
+    public static int countCohorts(int year){
+        try{
+            int count = new File("data/"+year+"//").list().length;
+            return count;
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     /** THIS IS FOR TESTING THE FUNCTION */
     public static void main(String[] args) {
 
-        readTranscript(1);
-        readTranscript(2);
-        readTranscript(3);
-        readTranscript(4);
-        readConfig("area");
-        readConfig("equivalencies");
-        readConfig("level");
-
-        MasterList ml = new MasterList();
-        ml.create(transcripts);
-       
-        System.out.println(area);
-        System.out.println(equivalencies);
-        System.out.println(level);
 //        System.out.println(transcripts.get(1).getCourses().get(7).toString());
 //        System.out.println(transcripts.get(1).getCourses().get(7).getSection().getYear());
 //        System.out.println(transcripts.get(1).getCourses().get(7).getSection().getCampus());
@@ -157,12 +154,12 @@ public class ConfigReader {
 //        System.out.println(transcripts.get(1).getTranscriptID());
 //        System.out.println(transcripts.get(1).getCourses().get(7).getSection().getTerm());
 
-        System.out.println(AnalyzeTranscript.countNumberOfStudentPerYear(2011));
         System.out.println(AnalyzeTranscript.countNumberOfStudentPerYearPerCourse(2011, "STAT2593"));
-        //System.out.println(AnalyzeTranscript.getCoursesPerArea("math"));
-        //System.out.println(AnalyzeTranscript.getGradeDistributionPerArea("math"));
-        for(int i = 0; i < ml.getMasterList().size(); i++) {
-        	System.out.println(ml.getMasterList().get(i));
-        }
+        System.out.println(AnalyzeTranscript.getCoursesPerArea(2011,"math"));
+        System.out.println(AnalyzeTranscript.getGradeDistributionPerArea(2011,"math"));
+//        System.out.println(MasterList.createMasterList(2011));
+        System.out.println(AnalyzeTranscript.getGradeDistributionPerCourse(2011, "STAT2593"));
+        System.out.println(AnalyzeTranscript.getGradeDistributionPerCohort(2011));
+        System.out.println(AnalyzeTranscript.getGradeDistributionForEveryArea(2011));
     }
 }

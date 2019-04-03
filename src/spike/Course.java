@@ -6,12 +6,18 @@ public class Course {
 	private Section section;
 	private double creditHours;
 	private String grade;
+	private String courseName;
 
-	public Course(String courseNum, Section section, double creditHours, String grade){
+	public Course(String courseNum, String courseName, Section section, double creditHours, String grade){
 		this.courseNumber = courseNum;
+		this.courseName = courseName;
 		this.section = section;
 		this.creditHours = creditHours;
 		this.grade = grade;
+	}
+
+	public String getCourseName() {
+		return courseName;
 	}
 
 	public String getCourseNumber() {
@@ -43,7 +49,7 @@ public class Course {
 	}
 
 	public String toString(){
-		return courseNumber + "\t" + section.getSectionId() + "\t" + grade + "\t" + creditHours + "\t" + section.getTerm();
+		return courseNumber + "\t" + courseName + "\t" + section.getSectionId() + "\t" + grade + "\t" + creditHours + "\t" + section.getTerm() + "\n";
 	}
 
 }
