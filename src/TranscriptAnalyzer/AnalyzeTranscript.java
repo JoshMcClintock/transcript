@@ -153,11 +153,11 @@ public class AnalyzeTranscript {
     }
 
     public static double gpaPerAreaPerTranscript(int year,String area,int index){
-        ArrayList<Course> courses = getCoursePerAreaPerTranscript(year,area,index);
+        ArrayList<Course> coursePerAreaPerTranscript = getCoursePerAreaPerTranscript(year,area,index);
         double gpa = 0;
-        for (Course course : courses){
-            double total = 0;
-            double totalCH = 0;
+        double total = 0;
+        double totalCH = 0;
+        for (Course course : coursePerAreaPerTranscript){
             String letter = course.getGrade();
             double point = 0;
             double ch = course.getCreditHours();

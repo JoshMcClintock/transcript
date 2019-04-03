@@ -21,7 +21,7 @@ public class ConfigReader {
     public static Transcript getSingleTranscript(int year, int i) {
         try {
             transcript = new Transcript();
-            String fileName = "data/" + year + "/transcript" + i + ".txt";
+            String fileName = "data/" + year + "/" + year + "EE_" + i + ".txt";
             fr = new FileReader(fileName);
             br = new BufferedReader(fr);
 
@@ -165,5 +165,6 @@ public class ConfigReader {
         OutputWriter.writeDistributionPerCourse(2011);
         OutputWriter.writeMasterList(2011);
         OutputWriter.writeGpaPerAreaPerTranscript(2011,1);
+        OutputWriter.writeGpaPerAreaPerTranscript(2015,15);
     }
 }

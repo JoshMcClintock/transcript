@@ -1,0 +1,8 @@
+MATH        	3.93
+SCIENCE     	4.30
+FUNDAMENTALS	3.92
+SPECIALIZED 	4.30
+TERMINAL    	4.30
+CORE        	4.14
+CSE         	4.08
+SOCIETY     	4.00
