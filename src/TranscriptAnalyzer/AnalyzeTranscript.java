@@ -42,21 +42,17 @@ public class AnalyzeTranscript {
 	public static ArrayList<Course> getCoursePerAreaPerTranscript(String area, int index) {
 		ArrayList<Course> coursesPerAreaPerTranscript = new ArrayList<>();
 		if (ConfigReader.getTranscripts().size() > 0) {
-			for (Transcript transcript : ConfigReader.getTranscripts()) {
-				if (transcript.getTranscriptID() == index) {
-					for (int i = 0; i < ConfigReader.getArea().size(); i++) {
-						if (area.equalsIgnoreCase(ConfigReader.getArea().get(i).get(0))) {
-							for (String courseNum : ConfigReader.getArea().get(i)) {
-								for (Course c : transcript.getCourses()) {
-									if (c.getCourseNumber().equalsIgnoreCase(courseNum)) {
-										coursesPerAreaPerTranscript.add(c);
-									}
-								}
+			Transcript transcript = ConfigReader.getTranscripts().get(index - 1);
+			for (int i = 0; i < ConfigReader.getArea().size(); i++) {
+				if (area.equalsIgnoreCase(ConfigReader.getArea().get(i).get(0))) {
+					for (String courseNum : ConfigReader.getArea().get(i)) {
+						for (Course c : transcript.getCourses()) {
+							if (c.getCourseNumber().equalsIgnoreCase(courseNum)) {
+								coursesPerAreaPerTranscript.add(c);
 							}
 						}
 					}
 				}
-
 			}
 		}
 

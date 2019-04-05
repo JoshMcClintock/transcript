@@ -4,6 +4,7 @@ import java.io.File;
 
 import TranscriptAnalyzer.ConfigReader;
 import TranscriptAnalyzer.OutputWriter;
+import javafx.application.HostServices;
 import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -11,14 +12,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 public class AnalyzerPane extends GridPane {
 
+	private HostServices hs;
+	
 	private Stage stage;
 
+	private Label lblReadTranscripts;
+	
 	private TextField intputPath;
 	private File transcriptDirectory;
 
@@ -27,8 +33,9 @@ public class AnalyzerPane extends GridPane {
 
 	private TextField transcriptId;
 
-	public AnalyzerPane(Stage stage) {
+	public AnalyzerPane(Stage stage, HostServices hs) {
 
+		this.hs = hs;
 		this.stage = stage;
 
 		Font font = new Font(14);
@@ -63,6 +70,9 @@ public class AnalyzerPane extends GridPane {
 		browseOutput.setAlignment(Pos.BASELINE_LEFT);
 		browseOutput.setOnAction(this::setOutputPath);
 
+		lblReadTranscripts = new Label();
+		lblReadTranscripts.setFont(new Font(20));
+		
 		Button btnReadTranscripts = new Button("Read Transcripts");
 		btnReadTranscripts.setFont(font);
 		btnReadTranscripts.setAlignment(Pos.BASELINE_CENTER);
@@ -98,7 +108,7 @@ public class AnalyzerPane extends GridPane {
 		btnViewDistPerArea.setAlignment(Pos.BASELINE_LEFT);
 		btnViewDistPerArea.setOnAction(this::viewDistPerArea);
 
-		Button btnViewDistPerCourse = new Button("Dist/Course");
+		Button btnViewDistPerCourse = new Button("Raw");
 		btnViewDistPerCourse.setFont(font);
 		btnViewDistPerCourse.setAlignment(Pos.BASELINE_LEFT);
 		btnViewDistPerCourse.setOnAction(this::vewDistPerCourse);
@@ -114,7 +124,8 @@ public class AnalyzerPane extends GridPane {
 		add(outputPath, 2, 1);
 		add(browseOutput, 3, 1);
 		add(spacer1, 0, 2);
-		add(btnReadTranscripts, 1, 3);
+		add(btnReadTranscripts, 0, 3);
+		add(lblReadTranscripts, 1, 3);
 		add(spacer2, 0, 4);
 		add(viewLabel, 0, 5);
 		add(btnViewMasterList, 0, 6);
@@ -150,25 +161,36 @@ public class AnalyzerPane extends GridPane {
 	public void readTranscripts(ActionEvent event) {
 		ConfigReader.getTranscripts();
 		System.out.println("Transcripts Read");
+		
+		lblReadTranscripts.setTextFill(Color.GREEN);;
+		
+		lblReadTranscripts.setText("Success!");
 	}
 
 	public void viewMasterList(ActionEvent event) {
 		OutputWriter.writeMasterList();
 		System.out.println("Computed Master List");
+		
+		hs.showDocument(outputDirectory + "/Master List");
 	}
-
 	public void viewGPA(ActionEvent event) {
 		OutputWriter.writeGpaPerAreaPerTranscript(Integer.parseInt(transcriptId.getText()));
 		System.out.println("Computed GPA");
+		
+		hs.showDocument(outputDirectory + "/Gpa Per Transcript" + Integer.parseInt(transcriptId.getText()));
 	}
 
 	public void viewDistPerArea(ActionEvent event) {
 		OutputWriter.writeDistributionPerArea();
 		System.out.println("Computed Dist per Area");
+
+		hs.showDocument(outputDirectory + "/Distribution Per Area");
 	}
 
 	public void vewDistPerCourse(ActionEvent event) {
 		OutputWriter.writeDistributionPerCourse();
 		System.out.println("Computed Dist per Course");
+	
+		hs.showDocument(outputDirectory + "/Distribution Per Course");
 	}
 }
