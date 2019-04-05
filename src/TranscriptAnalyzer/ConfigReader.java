@@ -9,167 +9,168 @@ import java.util.*;
 
 public class ConfigReader {
 
-    private static BufferedReader br = null;
-    private static FileReader fr = null;
+	private static BufferedReader br = null;
+	private static FileReader fr = null;
 
-    private static ArrayList<ArrayList<String>> equivalencies;
-    private static ArrayList<ArrayList<String>> area;
-    private static ArrayList<ArrayList<String>> level;
-    private static ArrayList<Transcript> transcripts;
-    private static Transcript transcript;
+	private static ArrayList<ArrayList<String>> equivalencies;
+	private static ArrayList<ArrayList<String>> area;
+	private static ArrayList<ArrayList<String>> level;
+	private static ArrayList<Transcript> transcripts;
+	private static Transcript transcript;
 
-    private static File transcriptDirectory;
+	private static File transcriptDirectory;
 
-    private static void readTranscript() {
-        try {
-            transcripts = new ArrayList<>();
+	private static void readTranscript() {
+		try {
+			transcripts = new ArrayList<>();
 
-            transcriptDirectory = new File("data/"); // Default directory
+			transcriptDirectory = new File("data/2011"); // Default directory
 
-            File[] transcriptFiles = transcriptDirectory.listFiles();
+			File[] transcriptFiles = transcriptDirectory.listFiles();
 
-            if (transcriptFiles != null){
+			if (transcriptFiles != null) {
 
-                for (File file : transcriptFiles) {
+				for (File file : transcriptFiles) {
 
-                    transcript = new Transcript();
-                    fr = new FileReader(file.getAbsolutePath());
-                    br = new BufferedReader(fr);
+					transcript = new Transcript();
+					fr = new FileReader(file.getAbsolutePath());
+					br = new BufferedReader(fr);
 
-                   // System.out.println(file.getAbsolutePath());
+					// System.out.println(file.getAbsolutePath());
 
-                    String sCurrentLine;
+					String sCurrentLine;
 
-                    while ((sCurrentLine = br.readLine()) != null) {
-                        if (!sCurrentLine.isEmpty()) {
-                            String str = sCurrentLine.replaceAll("\\s", ",");
-                            String[] array = str.split("\\,");
-                            ArrayList<String> arrayList = new ArrayList<>();
-                            for (String s : array) {
-                                if (!s.isEmpty())
-                                    arrayList.add(s);
-                            }
-                            // Create objects
-                            String courseNum = arrayList.get(0);
-                            String sectionId = arrayList.get(1);
-                            String courseName = "";
+					while ((sCurrentLine = br.readLine()) != null) {
+						if (!sCurrentLine.isEmpty()) {
+							String str = sCurrentLine.replaceAll("\\s", ",");
+							String[] array = str.split("\\,");
+							ArrayList<String> arrayList = new ArrayList<>();
+							for (String s : array) {
+								if (!s.isEmpty())
+									arrayList.add(s);
+							}
+							// Create objects
+							String courseNum = arrayList.get(0);
+							String sectionId = arrayList.get(1);
+							String courseName = "";
 
-                            String grade;
-                            String ch;
-                            String term;
+							String grade;
+							String ch;
+							String term;
 
-                            int index = arrayList.size();
+							int index = arrayList.size();
 
-                            grade = arrayList.get(index-3);
-                            ch = arrayList.get(index-2);
-                            term = arrayList.get(index-1);
+							grade = arrayList.get(index - 3);
+							ch = arrayList.get(index - 2);
+							term = arrayList.get(index - 1);
 
-                            if (term.charAt(0)!='2'){
-                                index--;
-                                grade = arrayList.get(index-3);
-                                ch = arrayList.get(index-2);
-                                term = arrayList.get(index-1);
-                            }
-                            if (ch.equalsIgnoreCase("#")){
-                                ch = arrayList.get(index-3);
-                                grade = arrayList.get(index - 4);
-                                courseName = "";
-                                for (int j = 2; j < index - 4; j++) {
-                                    courseName += arrayList.get(j) + " ";
-                                }
-                            }
-                            if (grade.equalsIgnoreCase("term")){
-                                grade = " ";
-                                for (int j = 2; j < index - 2; j++) {
-                                    courseName += arrayList.get(j) + " ";
-                                }
+							if (term.charAt(0) != '2') {
+								index--;
+								grade = arrayList.get(index - 3);
+								ch = arrayList.get(index - 2);
+								term = arrayList.get(index - 1);
+							}
+							if (ch.equalsIgnoreCase("#")) {
+								ch = arrayList.get(index - 3);
+								grade = arrayList.get(index - 4);
+								courseName = "";
+								for (int j = 2; j < index - 4; j++) {
+									courseName += arrayList.get(j) + " ";
+								}
+							}
+							if (grade.equalsIgnoreCase("term")) {
+								grade = " ";
+								for (int j = 2; j < index - 2; j++) {
+									courseName += arrayList.get(j) + " ";
+								}
 
-                            }
+							}
 
+							Section s = new Section(sectionId, term);
+							Course c = new Course(courseNum, courseName, s, Double.parseDouble(ch), grade);
+							transcript.addCourse(c);
+						}
+					}
+				}
+				transcripts.add(transcript);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+	}
 
-//                            System.out.println(ch);
+	private static void readConfig(String type) {
+		ArrayList<String> temp;
+		String fileName = "config/" + type + ".txt";
+		try {
+			fr = new FileReader(fileName);
+			br = new BufferedReader(fr);
 
+			String sCurrentLine;
+			while ((sCurrentLine = br.readLine()) != null) {
+				temp = new ArrayList<>();
+				String[] array = sCurrentLine.split("\\s");
+				for (String s : array) {
+					temp.add(s);
+				}
+				if (type.equalsIgnoreCase("equivalencies"))
+					equivalencies.add(temp);
+				else if (type.equalsIgnoreCase("level"))
+					level.add(temp);
+				else if (type.equalsIgnoreCase("area"))
+					area.add(temp);
+				else
+					System.out.println("unsupported type: " + type);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+	}
 
-                            Section s = new Section(sectionId, term);
-                            Course c = new Course(courseNum, courseName, s, Double.parseDouble(ch), grade);
-                            transcript.addCourse(c);
-                        }
-                    }
-                }
-                transcripts.add(transcript);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            close();
-        }
-    }
+	public static void setTranscriptDirectory(File path) {
+		transcriptDirectory = path;
+	}
 
-    private static void readConfig(String type){
-        ArrayList<String> temp;
-        String fileName = "config/" + type + ".txt";
-        try {
-            fr = new FileReader(fileName);
-            br = new BufferedReader(fr);
+	private static void close() {
+		try {
+			if (br != null)
+				br.close();
+			if (fr != null)
+				fr.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
 
-            String sCurrentLine;
-            while ((sCurrentLine = br.readLine()) != null) {
-                temp = new ArrayList<>();
-                String[] array = sCurrentLine.split("\\s");
-                for (String s : array) {
-                        temp.add(s);
-                }
-                if (type.equalsIgnoreCase("equivalencies"))
-                    equivalencies.add(temp);
-                else if (type.equalsIgnoreCase( "level"))
-                    level.add(temp);
-                else if (type.equalsIgnoreCase("area"))
-                    area.add(temp);
-                else System.out.println("unsupported type: " + type);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            close();
-        }
-    }
+	public static ArrayList<ArrayList<String>> getEquivalencies() {
+		equivalencies = new ArrayList<>();
+		readConfig("equivalencies");
+		return equivalencies;
+	}
 
-    private static void close(){
-        try {
-            if (br != null)
-                br.close();
-            if (fr != null)
-                fr.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
+	public static ArrayList<ArrayList<String>> getArea() {
+		area = new ArrayList<>();
+		readConfig("area");
+		return area;
+	}
 
-    public static ArrayList<ArrayList<String>> getEquivalencies(){
-        equivalencies = new ArrayList<>();
-        readConfig("equivalencies");
-        return equivalencies;
-    }
+	public static ArrayList<ArrayList<String>> getLevel() {
+		level = new ArrayList<>();
+		readConfig("level");
+		return level;
+	}
 
-    public static ArrayList<ArrayList<String>> getArea(){
-        area = new ArrayList<>();
-        readConfig("area");
-        return area;
-    }
+	public static ArrayList<Transcript> getTranscripts() {
+		readTranscript();
+		return transcripts;
+	}
 
-    public static ArrayList<ArrayList<String>> getLevel(){
-        level = new ArrayList<>();
-        readConfig("level");
-        return level;
-    }
-
-    public static ArrayList<Transcript> getTranscripts(){
-        readTranscript();
-        return transcripts;
-    }
-
-    /** THIS IS FOR TESTING THE FUNCTION */
-    public static void main(String[] args) {
+	/** THIS IS FOR TESTING THE FUNCTION */
+	public static void main(String[] args) {
 
 //        System.out.println(AnalyzeTranscript.countNumberOfStudentPerYearPerCourse( "STAT2593"));
 //        System.out.println(AnalyzeTranscript.getCoursesPerArea("math"));
@@ -177,10 +178,10 @@ public class ConfigReader {
 //        System.out.println(AnalyzeTranscript.getGradeDistributionPerCourse( "STAT2593"));
 //        System.out.println(AnalyzeTranscript.getGradeDistributionPerCohort());
 //        System.out.println(AnalyzeTranscript.getGradeDistributionForEveryArea());
-        OutputWriter.writeDistributionPerArea();
-        OutputWriter.writeDistributionPerCourse();
-        OutputWriter.writeMasterList();
-        OutputWriter.writeGpaPerAreaPerTranscript(1);
-        //OutputWriter.writeGpaPerAreaPerTranscript(15);
-    }
+//		OutputWriter.writeDistributionPerArea();
+//		OutputWriter.writeDistributionPerCourse();
+//		OutputWriter.writeMasterList();
+//		OutputWriter.writeGpaPerAreaPerTranscript(1);
+		// OutputWriter.writeGpaPerAreaPerTranscript(15);
+	}
 }

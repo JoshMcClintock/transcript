@@ -2,6 +2,8 @@ package gui;
 
 import java.io.File;
 
+import TranscriptAnalyzer.ConfigReader;
+import TranscriptAnalyzer.OutputWriter;
 import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -19,10 +21,10 @@ public class AnalyzerPane extends GridPane {
 
 	private TextField intputPath;
 	private File transcriptDirectory;
-	
+
 	private TextField outputPath;
 	private File outputDirectory;
-	
+
 	private TextField transcriptId;
 
 	public AnalyzerPane(Stage stage) {
@@ -65,37 +67,37 @@ public class AnalyzerPane extends GridPane {
 		btnReadTranscripts.setFont(font);
 		btnReadTranscripts.setAlignment(Pos.BASELINE_CENTER);
 		btnReadTranscripts.setOnAction(this::readTranscripts);
-		
+
 		Label viewLabel = new Label("Retrieve:");
 		viewLabel.setFont(font);
-		
+
 		Label spacer1 = new Label(" ");
 		spacer1.setFont(font);
-		
+
 		Label spacer2 = new Label(" ");
 		spacer2.setFont(font);
-		
+
 		Button btnViewMasterList = new Button("Master List");
 		btnViewMasterList.setFont(font);
 		btnViewMasterList.setAlignment(Pos.BASELINE_LEFT);
 		btnViewMasterList.setOnAction(this::viewMasterList);
-		
+
 		transcriptId = new TextField();
 		transcriptId.setFont(font);
 		transcriptId.setPrefWidth(20);
 		transcriptId.setAlignment(Pos.BASELINE_LEFT);
 		transcriptId.setText("Transcript ID");
-		
+
 		Button btnViewGPA = new Button("ind. GPA");
 		btnViewGPA.setFont(font);
 		btnViewGPA.setAlignment(Pos.BASELINE_LEFT);
 		btnViewGPA.setOnAction(this::viewGPA);
-		
+
 		Button btnViewDistPerArea = new Button("Dist/Area");
 		btnViewDistPerArea.setFont(font);
 		btnViewDistPerArea.setAlignment(Pos.BASELINE_LEFT);
 		btnViewDistPerArea.setOnAction(this::viewDistPerArea);
-		
+
 		Button btnViewDistPerCourse = new Button("Dist/Course");
 		btnViewDistPerCourse.setFont(font);
 		btnViewDistPerCourse.setAlignment(Pos.BASELINE_LEFT);
@@ -120,7 +122,7 @@ public class AnalyzerPane extends GridPane {
 		add(btnViewGPA, 1, 6);
 		add(btnViewDistPerArea, 0, 7);
 		add(btnViewDistPerCourse, 1, 7);
-		
+
 	}
 
 	public void setInputPath(ActionEvent event) {
@@ -130,35 +132,43 @@ public class AnalyzerPane extends GridPane {
 		if (transcriptDirectory != null) {
 			intputPath.setText(transcriptDirectory.getAbsolutePath());
 		}
+
+		ConfigReader.setTranscriptDirectory(transcriptDirectory);
 	}
 
 	public void setOutputPath(ActionEvent event) {
 		DirectoryChooser dc = new DirectoryChooser();
 		outputDirectory = dc.showDialog(stage);
-		
+
 		if (outputDirectory != null) {
 			outputPath.setText(outputDirectory.getAbsolutePath());
 		}
+
+		OutputWriter.setOutputDirectory(outputDirectory);
 	}
-	
+
 	public void readTranscripts(ActionEvent event) {
-	
+		ConfigReader.getTranscripts();
+		System.out.println("Transcripts Read");
 	}
 
 	public void viewMasterList(ActionEvent event) {
-		
+		OutputWriter.writeMasterList();
+		System.out.println("Computed Master List");
 	}
-	
+
 	public void viewGPA(ActionEvent event) {
-		
+		OutputWriter.writeGpaPerAreaPerTranscript(Integer.parseInt(transcriptId.getText()));
+		System.out.println("Computed GPA");
 	}
-	
+
 	public void viewDistPerArea(ActionEvent event) {
-		
+		OutputWriter.writeDistributionPerArea();
+		System.out.println("Computed Dist per Area");
 	}
-	
+
 	public void vewDistPerCourse(ActionEvent event) {
-		
+		OutputWriter.writeDistributionPerCourse();
+		System.out.println("Computed Dist per Course");
 	}
-	
 }
