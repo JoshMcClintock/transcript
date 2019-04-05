@@ -9,7 +9,7 @@ public class OutputWriter {
 	private static BufferedWriter bw = null;
 	private static FileWriter fw = null;
 	private static NumberFormat formatter = new DecimalFormat("#0.00");
-	private static File outputDirectory = new File("output/2015"); // Default directory
+	private static File outputDirectory = new File("output/"); // Default directory
 	private static final String DISTRIBUTION_PER_AREA = "/Distribution Per Area";
 	private static final String DISTRIBUTION_PER_COURSE = "/Distribution Per Course";
 	private static final String MASTER_LIST = "/Master List";
