@@ -10,7 +10,7 @@ public class TranscriptAnalyzer extends Application {
 
 		primaryStage.setTitle("Transcript Analyzer");
 
-		Scene scene = new Scene(new AnalyzerPane(primaryStage), 400, 300);
+		Scene scene = new Scene(new AnalyzerPane(primaryStage), 600, 300);
 
 		primaryStage.setScene(scene);
 		primaryStage.show();
