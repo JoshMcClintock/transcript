@@ -41,9 +41,9 @@ public class AnalyzeTranscript {
 
     public static ArrayList<Course> getCoursePerAreaPerTranscript(String area, int index){
         ArrayList<Course> coursesPerAreaPerTranscript = new ArrayList<>();
-        if (ConfigReader.getTranscripts().size()>0) {
-            for (Transcript transcript : ConfigReader.getTranscripts()){
-                if (transcript.getTranscriptID()==index){
+        ArrayList<Transcript> transcripts = ConfigReader.getTranscripts();
+        if (transcripts.size()>0) {
+            Transcript transcript = ConfigReader.getTranscripts().get(index-1);
                     for (int i = 0; i < ConfigReader.getArea().size(); i++) {
                         if (area.equalsIgnoreCase(ConfigReader.getArea().get(i).get(0))) {
                             for (String courseNum : ConfigReader.getArea().get(i)) {
@@ -56,9 +56,6 @@ public class AnalyzeTranscript {
                         }
                     }
                 }
-
-            }
-        }
 
         return coursesPerAreaPerTranscript;
     }
@@ -224,7 +221,7 @@ public class AnalyzeTranscript {
         for (Transcript transcript : transcripts) {
             for (Course course : transcript.getCourses()) {
                 String courseNum = course.getCourseNumber();
-                if (! masterList.contains(courseNum) && !courseNum.isEmpty()) {
+                if ((!masterList.contains(courseNum)) && (!courseNum.isEmpty())) {
                      masterList.add(courseNum);
                 }
             }

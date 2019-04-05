@@ -20,11 +20,14 @@ public class ConfigReader {
 
     private static File transcriptDirectory;
 
-    private static void readTranscript() {
-        try {
-            transcripts = new ArrayList<>();
+    public static void setTranscriptDirectory(File file){
+        transcriptDirectory = file;
+    }
 
-            transcriptDirectory = new File("data/"); // Default directory
+    public static ArrayList<Transcript> getTranscripts() {
+        transcripts = new ArrayList<>();
+        try {
+            transcriptDirectory = new File("data/2015"); // Default directory
 
             File[] transcriptFiles = transcriptDirectory.listFiles();
 
@@ -35,8 +38,6 @@ public class ConfigReader {
                     transcript = new Transcript();
                     fr = new FileReader(file.getAbsolutePath());
                     br = new BufferedReader(fr);
-
-                   // System.out.println(file.getAbsolutePath());
 
                     String sCurrentLine;
 
@@ -83,26 +84,21 @@ public class ConfigReader {
                                 for (int j = 2; j < index - 2; j++) {
                                     courseName += arrayList.get(j) + " ";
                                 }
-
                             }
-
-
-//                            System.out.println(ch);
-
-
                             Section s = new Section(sectionId, term);
                             Course c = new Course(courseNum, courseName, s, Double.parseDouble(ch), grade);
                             transcript.addCourse(c);
                         }
                     }
+                    transcripts.add(transcript);
                 }
-                transcripts.add(transcript);
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             close();
         }
+        return transcripts;
     }
 
     private static void readConfig(String type){
@@ -132,6 +128,7 @@ public class ConfigReader {
         } finally {
             close();
         }
+
     }
 
     private static void close(){
@@ -163,11 +160,6 @@ public class ConfigReader {
         return level;
     }
 
-    public static ArrayList<Transcript> getTranscripts(){
-        readTranscript();
-        return transcripts;
-    }
-
     /** THIS IS FOR TESTING THE FUNCTION */
     public static void main(String[] args) {
 
@@ -181,6 +173,6 @@ public class ConfigReader {
         OutputWriter.writeDistributionPerCourse();
         OutputWriter.writeMasterList();
         OutputWriter.writeGpaPerAreaPerTranscript(1);
-        //OutputWriter.writeGpaPerAreaPerTranscript(15);
+        OutputWriter.writeGpaPerAreaPerTranscript(15);
     }
 }
