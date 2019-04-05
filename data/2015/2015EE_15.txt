@@ -47,4 +47,4 @@ APSC2023   FR01B  SURVEY OF 19TH & 20TH C PHYSIC              A+      3.00      
   STAT2593   FR01B  PROB & STAT FOR ENG                         A+      3.00      2012/WI          
   STS1003    ST01A  SCIENCE, TECHNOLOGY & SOCIETY               A       3.00      2014/FA          
   TME4025    FR01X  PRODUCT DESIGN & DEVELOPMENT                CTN     0.00      2014/FA          
-  TME4025    FR01Y  PRODUCT DESIGN & DEVELOPMENT                A+      8.00      2015/WI 
+  TME4025    FR01Y  PRODUCT DESIGN & DEVELOPMENT                A+      8.00      2015/WI
