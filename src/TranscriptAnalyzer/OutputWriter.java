@@ -1,6 +1,5 @@
 package TranscriptAnalyzer;
 
-
 import java.io.*;
 import java.text.*;
 import java.util.ArrayList;
@@ -10,11 +9,16 @@ public class OutputWriter {
 	private static BufferedWriter bw = null;
 	private static FileWriter fw = null;
 	private static NumberFormat formatter = new DecimalFormat("#0.00");
-	
-	public static void writeMasterList(int year){
-		ArrayList<String> masterList = AnalyzeTranscript.createMasterList(year);
+	private static File outputDirectory = new File("output/"); // Default directory
+	private static final String DISTRIBUTION_PER_AREA = "/Distribution Per Area";
+	private static final String DISTRIBUTION_PER_COURSE = "/Distribution Per Course";
+	private static final String MASTER_LIST = "/Master List";
+	private static final String GPA_PER_TRANSCRIPT = "/Gpa Per Transcript";
+
+	public static void writeMasterList(){
+		ArrayList<String> masterList = AnalyzeTranscript.createMasterList();
 		try {
-			fw = new FileWriter("output/"+year+"/Master List" + ".txt");
+			fw = new FileWriter(outputDirectory.getAbsolutePath()+MASTER_LIST);
 			bw = new BufferedWriter(fw);
 			for (String str : masterList)
 				bw.write(str+"\n");
@@ -27,10 +31,10 @@ public class OutputWriter {
 		}
 	}
 
-	public static void writeDistributionPerArea(int year){
-		ArrayList<ArrayList<Integer>> distributionPerArea = AnalyzeTranscript.getGradeDistributionForEveryArea(year);
+	public static void writeDistributionPerArea(){
+		ArrayList<ArrayList<Integer>> distributionPerArea = AnalyzeTranscript.getGradeDistributionForEveryArea();
 		try {
-			fw = new FileWriter("output/"+year+"/Distribution Per Area" + ".txt");
+			fw = new FileWriter(outputDirectory.getAbsolutePath()+DISTRIBUTION_PER_AREA);
 			bw = new BufferedWriter(fw);
 			writeLevelIntoFile();
 			for (int i=0;i<distributionPerArea.size();i++){
@@ -51,15 +55,16 @@ public class OutputWriter {
 		}
 	}
 
-	public static void writeDistributionPerCourse(int year){
-		ArrayList<ArrayList<Integer>> distributionPerCourse = AnalyzeTranscript.getGradeDistributionPerCohort(year);
+	public static void writeDistributionPerCourse(){
+		ArrayList<ArrayList<Integer>> distributionPerCourse = AnalyzeTranscript.getGradeDistributionPerCohort();
 		try {
-			fw = new FileWriter("output/"+year+"/Distribution Per Course" + ".txt");
+			fw = new FileWriter(outputDirectory.getAbsolutePath()+DISTRIBUTION_PER_COURSE);
+
 			bw = new BufferedWriter(fw);
 			writeLevelIntoFile();
 			for (int i=0;i<distributionPerCourse.size();i++){
 				bw.write("\n");
-				String temp = AnalyzeTranscript.createMasterList(year).get(i);
+				String temp = AnalyzeTranscript.createMasterList().get(i);
 		        temp = formatItTo12Char(temp);
 				bw.write(temp+"\t");
 				for (int dis : distributionPerCourse.get(i)) {
@@ -75,10 +80,10 @@ public class OutputWriter {
 		}
 	}
 
-	public static void writeGpaPerAreaPerTranscript(int year, int index){
-		ArrayList<Double> gpaPerAreaPerTranscript = AnalyzeTranscript.getAverageGradePerTranscriptForEachArea(year,index);
+	public static void writeGpaPerAreaPerTranscript(int index){
+		ArrayList<Double> gpaPerAreaPerTranscript = AnalyzeTranscript.getAverageGradePerTranscriptForEachArea(index);
 		try{
-			fw = new FileWriter("output/"+year+"/GPA - Transcript" + index + ".txt");
+			fw = new FileWriter(outputDirectory.getAbsolutePath()+GPA_PER_TRANSCRIPT+index);
 			bw = new BufferedWriter(fw);
 			for (int i=0;i<gpaPerAreaPerTranscript.size();i++) {
 				String temp = ConfigReader.getArea().get(i).get(0);
@@ -120,5 +125,4 @@ public class OutputWriter {
 			ex.printStackTrace();
 		}
 	}
-
 }
