@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import spike.Course;
-import spike.Section;
+import TranscriptAnalyzer.Course;
+import TranscriptAnalyzer.Section;
 
 class TestCourse {
 
@@ -50,7 +50,7 @@ class TestCourse {
 
 	@Test
 	void testSetCreditHours() {
-		Double creditHours = 6.0;
+		double creditHours = 6.0;
 		c.setCreditHours(creditHours);
 
 		assertEquals(creditHours, c.getCreditHours());

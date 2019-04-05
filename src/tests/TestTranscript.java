@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import spike.Course;
-import spike.Section;
-import spike.Transcript;
+import TranscriptAnalyzer.Course;
+import TranscriptAnalyzer.Section;
+import TranscriptAnalyzer.Transcript;
 
 class TestTranscript {
 
