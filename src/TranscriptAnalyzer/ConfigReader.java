@@ -27,7 +27,7 @@ public class ConfigReader {
     public static ArrayList<Transcript> getTranscripts() {
         transcripts = new ArrayList<>();
         try {
-            transcriptDirectory = new File("data/"); // Default directory
+            transcriptDirectory = new File("data/2015"); // Default directory
 
             File[] transcriptFiles = transcriptDirectory.listFiles();
 
@@ -169,10 +169,11 @@ public class ConfigReader {
 //        System.out.println(AnalyzeTranscript.getGradeDistributionPerCourse( "STAT2593"));
 //        System.out.println(AnalyzeTranscript.getGradeDistributionPerCohort());
 //        System.out.println(AnalyzeTranscript.getGradeDistributionForEveryArea());
+        OutputWriter.writeLevelPerArea();
+        OutputWriter.writeDistributionPerCourseWithEq();
+        OutputWriter.writeMasterListWithEq();
         OutputWriter.writeDistributionPerArea();
         OutputWriter.writeDistributionPerCourse();
         OutputWriter.writeMasterList();
-        OutputWriter.writeGpaPerAreaPerTranscript(1);
-        OutputWriter.writeGpaPerAreaPerTranscript(15);
     }
 }

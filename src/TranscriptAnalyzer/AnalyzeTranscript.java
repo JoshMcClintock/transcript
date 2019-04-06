@@ -4,22 +4,6 @@ import java.util.ArrayList;
 
 public class AnalyzeTranscript {
 
-    public static int countNumberOfStudentPerYearPerCourse(String courseNum){
-        ArrayList<Transcript> transcripts = ConfigReader.getTranscripts();
-        int count = 0;
-        for (Transcript t : transcripts){
-            boolean found = false;
-            for (int j = 0; j<t.getCourses().size()&&!found; j++){
-                Course c = t.getCourses().get(j);
-                if (courseNum.equalsIgnoreCase(c.getCourseNumber())){
-                    count++;
-                    found = true;
-                }
-            }
-        }
-        return count;
-    }
-
     public static ArrayList<Course> getCoursesPerArea(String area){
         ArrayList<Course> coursesPerArea = new ArrayList<>();
         ArrayList<Transcript> transcripts = ConfigReader.getTranscripts();
@@ -43,7 +27,7 @@ public class AnalyzeTranscript {
         ArrayList<Course> coursesPerAreaPerTranscript = new ArrayList<>();
         ArrayList<Transcript> transcripts = ConfigReader.getTranscripts();
         if (transcripts.size()>0) {
-            Transcript transcript = ConfigReader.getTranscripts().get(index-1);
+            Transcript transcript = ConfigReader.getTranscripts().get(index);
                     for (int i = 0; i < ConfigReader.getArea().size(); i++) {
                         if (area.equalsIgnoreCase(ConfigReader.getArea().get(i).get(0))) {
                             for (String courseNum : ConfigReader.getArea().get(i)) {
@@ -56,7 +40,6 @@ public class AnalyzeTranscript {
                         }
                     }
                 }
-
         return coursesPerAreaPerTranscript;
     }
 
@@ -156,7 +139,7 @@ public class AnalyzeTranscript {
         return gradeDistribution;
     }
 
-    public static double gpaPerAreaPerTranscript(String area,int index){
+    public static String gpaPerAreaPerTranscript(String area,int index){
         ArrayList<Course> coursePerAreaPerTranscript = getCoursePerAreaPerTranscript(area,index);
         double gpa = 0;
         double total = 0;
@@ -203,16 +186,60 @@ public class AnalyzeTranscript {
             totalCH += ch;
             gpa = total/totalCH;
         }
-        return gpa;
+        String letter = convertToLetter(gpa);
+        return letter;
     }
 
-    public static ArrayList<Double> getAverageGradePerTranscriptForEachArea(int index){
-        ArrayList<Double> averageGradePerTranscript = new ArrayList<>();
+    public static ArrayList<String> getAverageGradePerTranscriptForEachArea(int index){
+        ArrayList<String> averageGradePerTranscript = new ArrayList<>();
         for (ArrayList<String> arrayList : ConfigReader.getArea()) {
             String area = arrayList.get(0);
-            averageGradePerTranscript.add(gpaPerAreaPerTranscript(area, index));
+            averageGradePerTranscript.add(gpaPerAreaPerTranscript(area, index-1));
         }
         return averageGradePerTranscript;
+    }
+
+    public static ArrayList<Integer> getAverageArea(String area){
+
+        int exceeds = 0;
+        int meets = 0;
+        int marginal = 0;
+        int fails = 0;
+        int others = 0;
+
+        for (int index = 0;index<ConfigReader.getTranscripts().size();index++){
+            String gpa = gpaPerAreaPerTranscript(area,index);
+            for (int i = 0; i < ConfigReader.getLevel().size(); i++) {
+                for (int j = 1; j < ConfigReader.getLevel().get(i).size(); j++) {
+                    if (gpa.equalsIgnoreCase(ConfigReader.getLevel().get(i).get(j))) {
+                        switch (i) {
+                            case 0:
+                                exceeds++;
+                                break;
+                            case 1:
+                                meets++;
+                                break;
+                            case 2:
+                                marginal++;
+                                break;
+                            case 3:
+                                fails++;
+                                break;
+                            default:
+                                others++;
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        int[] gradeDistributionPerArea = {exceeds,meets,marginal,fails,others};
+        ArrayList<Integer> gradeDistributionPerAreaList = new ArrayList<>();
+        for (int i:gradeDistributionPerArea){
+            gradeDistributionPerAreaList.add(i);
+        }
+        return gradeDistributionPerAreaList;
     }
 
     public static ArrayList<String> createMasterList() {
@@ -237,13 +264,70 @@ public class AnalyzeTranscript {
         return gradeDistributionPerCohort;
     }
 
-//    public static ArrayList<String> getMasterListWithEquilvance(int year) {
-//        for (String courseNum : createMasterList(year)){
-//            for (int i=0;i< ConfigReader.getEquivalencies().size();i++){
-//                if (courseNum.equalsIgnoreCase(ConfigReader.getEquivalencies().get(i).get(0))){
-//
-//                }
-//            }
-//        }
-//    }
+    public static ArrayList<ArrayList<Integer>> getGradeDistributionPerCohortWithEq(){
+        ArrayList<ArrayList<Integer>> gradeDistributionPerCohort = new ArrayList<>();
+        for (String courseNum : getMasterListWithEquivalence()){
+            gradeDistributionPerCohort.add(getGradeDistributionPerCourse(courseNum));
+        }
+        return gradeDistributionPerCohort;
+    }
+
+    private static String convertToLetter(double gpa){
+        String output;
+        if (gpa < 1){
+            output = "F";
+        }
+        else if (gpa < 2){
+            output = "D";
+        }
+        else if (gpa < 2.3){
+            output = "C";
+        }
+        else if (gpa < 2.7){
+            output = "C+";
+        }
+        else if (gpa < 3.0){
+            output = "B-";
+        }
+        else if (gpa < 3.3){
+            output = "B";
+        }
+        else if (gpa < 3.7){
+            output = "B+";
+        }
+        else if (gpa < 4.0){
+            output = "A-";
+        }
+        else if (gpa < 4.3){
+            output = "A";
+        }
+        else if (gpa == 4.3){
+            output = "A+";
+        }
+        else {
+            output = "not supported";
+        }
+        return output;
+    }
+
+    public static ArrayList<String> getMasterListWithEquivalence() {
+        ArrayList<String> masterList = AnalyzeTranscript.createMasterList();
+        ArrayList<String> removeList = new ArrayList<>();
+        for (int i=0;i< ConfigReader.getEquivalencies().size();i++){
+            int count = 0;
+            for (String course : ConfigReader.getEquivalencies().get(i)){
+                for (String list : masterList){
+                    if (course.equalsIgnoreCase(list)){
+                        count++;
+                        if (count > 1) {
+                            count--;
+                            removeList.add(list);
+                        }
+                    }
+                }
+            }
+        }
+        masterList.removeAll(removeList);
+        return masterList;
+    }
 }
