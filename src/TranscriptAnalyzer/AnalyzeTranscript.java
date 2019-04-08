@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 public class AnalyzeTranscript {
 
+    static ArrayList<Transcript> transcripts = ConfigReader.getTranscripts();
+    static ArrayList<ArrayList<String>> levels = ConfigReader.getLevel();
+    static ArrayList<ArrayList<String>> areas = ConfigReader.getArea();
+
     public static ArrayList<Course> getCoursesPerArea(String area){
         ArrayList<Course> coursesPerArea = new ArrayList<>();
         ArrayList<Transcript> transcripts = ConfigReader.getTranscripts();
@@ -101,14 +105,13 @@ public class AnalyzeTranscript {
         int others = 0;
 
         ArrayList<Integer> gradeDistribution = new ArrayList<>();
-        ArrayList<Transcript> transcripts = ConfigReader.getTranscripts();
         for (Transcript t : transcripts) {
             for (Course course : t.getCourses()) {
                 if (course.getCourseNumber().equals(courseNum)) {
                     others ++;
-                    for (int i = 0; i < ConfigReader.getLevel().size(); i++) {
-                        for (int j = 1; j < ConfigReader.getLevel().get(i).size(); j++) {
-                            if (course.getGrade().equalsIgnoreCase(ConfigReader.getLevel().get(i).get(j))) {
+                    for (int i = 0; i < levels.size(); i++) {
+                        for (int j = 1; j < levels.get(i).size(); j++) {
+                            if (course.getGrade().equalsIgnoreCase(levels.get(i).get(j))) {
                                 switch (i) {
                                     case 0:
                                         exceeds++;
@@ -192,7 +195,7 @@ public class AnalyzeTranscript {
 
     public static ArrayList<String> getAverageGradePerTranscriptForEachArea(int index){
         ArrayList<String> averageGradePerTranscript = new ArrayList<>();
-        for (ArrayList<String> arrayList : ConfigReader.getArea()) {
+        for (ArrayList<String> arrayList : areas) {
             String area = arrayList.get(0);
             averageGradePerTranscript.add(gpaPerAreaPerTranscript(area, index-1));
         }
@@ -207,11 +210,11 @@ public class AnalyzeTranscript {
         int fails = 0;
         int others = 0;
 
-        for (int index = 0;index<ConfigReader.getTranscripts().size();index++){
+        for (int index = 0;index<transcripts.size();index++){
             String gpa = gpaPerAreaPerTranscript(area,index);
-            for (int i = 0; i < ConfigReader.getLevel().size(); i++) {
-                for (int j = 1; j < ConfigReader.getLevel().get(i).size(); j++) {
-                    if (gpa.equalsIgnoreCase(ConfigReader.getLevel().get(i).get(j))) {
+            for (int i = 0; i < levels.size(); i++) {
+                for (int j = 1; j < levels.get(i).size(); j++) {
+                    if (gpa.equalsIgnoreCase(levels.get(i).get(j))) {
                         switch (i) {
                             case 0:
                                 exceeds++;
@@ -244,7 +247,6 @@ public class AnalyzeTranscript {
 
     public static ArrayList<String> createMasterList() {
         ArrayList<String>  masterList = new ArrayList<>();
-        ArrayList<Transcript> transcripts = ConfigReader.getTranscripts();
         for (Transcript transcript : transcripts) {
             for (Course course : transcript.getCourses()) {
                 String courseNum = course.getCourseNumber();
@@ -256,17 +258,16 @@ public class AnalyzeTranscript {
         return  masterList;
     }
 
-    public static ArrayList<ArrayList<Integer>> getGradeDistributionPerCohort(){
+    public static ArrayList<ArrayList<Integer>> getGradeDistributionPerCohort(boolean isEq){
         ArrayList<ArrayList<Integer>> gradeDistributionPerCohort = new ArrayList<>();
-        for (String courseNum : createMasterList()){
-            gradeDistributionPerCohort.add(getGradeDistributionPerCourse(courseNum));
+        ArrayList<String> masterlist;
+        if (isEq){
+            masterlist = getMasterListWithEquivalence();
         }
-        return gradeDistributionPerCohort;
-    }
-
-    public static ArrayList<ArrayList<Integer>> getGradeDistributionPerCohortWithEq(){
-        ArrayList<ArrayList<Integer>> gradeDistributionPerCohort = new ArrayList<>();
-        for (String courseNum : getMasterListWithEquivalence()){
+        else{
+            masterlist = createMasterList();
+        }
+        for (String courseNum : masterlist){
             gradeDistributionPerCohort.add(getGradeDistributionPerCourse(courseNum));
         }
         return gradeDistributionPerCohort;
@@ -313,21 +314,28 @@ public class AnalyzeTranscript {
     public static ArrayList<String> getMasterListWithEquivalence() {
         ArrayList<String> masterList = AnalyzeTranscript.createMasterList();
         ArrayList<String> removeList = new ArrayList<>();
-        for (int i=0;i< ConfigReader.getEquivalencies().size();i++){
-            int count = 0;
-            for (String course : ConfigReader.getEquivalencies().get(i)){
-                for (String list : masterList){
-                    if (course.equalsIgnoreCase(list)){
-                        count++;
-                        if (count > 1) {
-                            count--;
-                            removeList.add(list);
+        ArrayList<ArrayList<String>> eq = ConfigReader.getEquivalencies();
+        if (eq.size()>0){
+            for (int i=0;i< eq.size();i++){
+                int count = 0;
+                for (String course : eq.get(i)){
+                    for (String list : masterList){
+                        if (course.equalsIgnoreCase(list)){
+                            count++;
+                            if (count > 1) {
+                                count--;
+                                removeList.add(list);
+                            }
                         }
                     }
                 }
             }
+            masterList.removeAll(removeList);
         }
-        masterList.removeAll(removeList);
         return masterList;
     }
+
+//    public static ArrayList<String> getDistributionWithoutRepeatedCourse(){
+//
+//    }
 }

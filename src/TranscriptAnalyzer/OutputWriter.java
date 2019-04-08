@@ -57,7 +57,7 @@ public class OutputWriter {
 	}
 
 	public static void writeDistributionPerCourse(){
-		ArrayList<ArrayList<Integer>> distributionPerCourse = AnalyzeTranscript.getGradeDistributionPerCohort();
+		ArrayList<ArrayList<Integer>> distributionPerCourse = AnalyzeTranscript.getGradeDistributionPerCohort(false);
 		try {
 			fw = new FileWriter(outputDirectory.getAbsolutePath()+DISTRIBUTION_PER_COURSE);
 
@@ -82,7 +82,7 @@ public class OutputWriter {
 	}
 
 	public static void writeDistributionPerCourseWithEq(){
-		ArrayList<ArrayList<Integer>> distributionPerCourse = AnalyzeTranscript.getGradeDistributionPerCohortWithEq();
+		ArrayList<ArrayList<Integer>> distributionPerCourse = AnalyzeTranscript.getGradeDistributionPerCohort(true);
 		try {
 			fw = new FileWriter(outputDirectory.getAbsolutePath()+COURSE_DISTRIBUTION_EQ);
 			bw = new BufferedWriter(fw);
