@@ -27,6 +27,8 @@ public class ConfigReader {
     public static ArrayList<Transcript> getTranscripts() {
         transcripts = new ArrayList<>();
         try {
+
+            ArrayList<ArrayList<String>> levels  = getLevel();
             transcriptDirectory = new File("data/2015"); // Default directory
 
             File[] transcriptFiles = transcriptDirectory.listFiles();
@@ -79,7 +81,15 @@ public class ConfigReader {
                                     courseName += arrayList.get(j) + " ";
                                 }
                             }
-                            if (grade.equalsIgnoreCase("term")){
+                            boolean gradeIsValid = false;
+                            for (ArrayList<String> a1 : levels) {
+                                for (String level : a1) {
+                                    if (level.equalsIgnoreCase(grade)) {
+                                        gradeIsValid = true;
+                                    }
+                                }
+                            }
+                            if (!gradeIsValid){
                                 grade = " ";
                                 for (int j = 2; j < index - 2; j++) {
                                     courseName += arrayList.get(j) + " ";
