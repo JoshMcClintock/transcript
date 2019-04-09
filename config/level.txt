@@ -1,4 +1,4 @@
 Exceeds A+ A A-
 Meets B+ B B-
-Marginal C+ C D
-Fails F
+Marginal C+ C
+Fails D F
