@@ -20,11 +20,16 @@ public class ConfigReader {
 
     private static File transcriptDirectory;
 
-    private static void readTranscript() {
-        try {
-            transcripts = new ArrayList<>();
+    public static void setTranscriptDirectory(File file){
+        transcriptDirectory = file;
+    }
 
-            transcriptDirectory = new File("data/"); // Default directory
+    public static ArrayList<Transcript> getTranscripts() {
+        transcripts = new ArrayList<>();
+        try {
+
+            ArrayList<ArrayList<String>> levels  = getLevel();
+            transcriptDirectory = new File("data/2015"); // Default directory
 
             File[] transcriptFiles = transcriptDirectory.listFiles();
 
@@ -35,8 +40,6 @@ public class ConfigReader {
                     transcript = new Transcript();
                     fr = new FileReader(file.getAbsolutePath());
                     br = new BufferedReader(fr);
-
-                   // System.out.println(file.getAbsolutePath());
 
                     String sCurrentLine;
 
@@ -78,31 +81,34 @@ public class ConfigReader {
                                     courseName += arrayList.get(j) + " ";
                                 }
                             }
-                            if (grade.equalsIgnoreCase("term")){
+                            boolean gradeIsValid = false;
+                            for (ArrayList<String> a1 : levels) {
+                                for (String level : a1) {
+                                    if (level.equalsIgnoreCase(grade)) {
+                                        gradeIsValid = true;
+                                    }
+                                }
+                            }
+                            if (!gradeIsValid){
                                 grade = " ";
                                 for (int j = 2; j < index - 2; j++) {
                                     courseName += arrayList.get(j) + " ";
                                 }
-
                             }
-
-
-//                            System.out.println(ch);
-
-
                             Section s = new Section(sectionId, term);
                             Course c = new Course(courseNum, courseName, s, Double.parseDouble(ch), grade);
                             transcript.addCourse(c);
                         }
                     }
+                    transcripts.add(transcript);
                 }
-                transcripts.add(transcript);
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             close();
         }
+        return transcripts;
     }
 
     private static void readConfig(String type){
@@ -132,6 +138,7 @@ public class ConfigReader {
         } finally {
             close();
         }
+
     }
 
     private static void close(){
@@ -163,11 +170,6 @@ public class ConfigReader {
         return level;
     }
 
-    public static ArrayList<Transcript> getTranscripts(){
-        readTranscript();
-        return transcripts;
-    }
-
     /** THIS IS FOR TESTING THE FUNCTION */
     public static void main(String[] args) {
 
@@ -177,10 +179,11 @@ public class ConfigReader {
 //        System.out.println(AnalyzeTranscript.getGradeDistributionPerCourse( "STAT2593"));
 //        System.out.println(AnalyzeTranscript.getGradeDistributionPerCohort());
 //        System.out.println(AnalyzeTranscript.getGradeDistributionForEveryArea());
+        OutputWriter.writeLevelPerArea();
+        OutputWriter.writeDistributionPerCourseWithEq();
+        OutputWriter.writeMasterListWithEq();
         OutputWriter.writeDistributionPerArea();
         OutputWriter.writeDistributionPerCourse();
         OutputWriter.writeMasterList();
-        OutputWriter.writeGpaPerAreaPerTranscript(1);
-        //OutputWriter.writeGpaPerAreaPerTranscript(15);
     }
 }

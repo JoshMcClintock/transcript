@@ -1,9 +1,9 @@
 				Exceeds		Meets		Marginal	Fails		Others
-MATH        	6			0			0			0			0			
-SCIENCE     	4			0			0			0			0			
-FUNDAMENTALS	2			3			0			0			0			
-SPECIALIZED 	10			3			1			0			0			
-TERMINAL    	6			1			0			0			0			
-CORE        	22			6			1			0			0			
-CSE         	3			0			0			0			0			
-SOCIETY     	1			0			0			0			0			
+MATH        	31			29			29			4			6			
+SCIENCE     	23			10			18			0			0			
+FUNDAMENTALS	25			32			8			5			3			
+SPECIALIZED 	79			82			25			10			18			
+TERMINAL    	48			42			12			4			15			
+CORE        	161			154			80			20			28			
+CSE         	21			14			12			1			10			
+SOCIETY     	7			2			4			1			4			
