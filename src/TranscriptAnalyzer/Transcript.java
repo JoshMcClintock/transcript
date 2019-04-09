@@ -1,4 +1,4 @@
-package spike;
+package TranscriptAnalyzer;
 
 import java.util.ArrayList;
 
@@ -44,7 +44,7 @@ public class Transcript {
 	public String toString() {
 		String str = "";
 		for (Course c : courses) {
-			str += c + "\n";
+			str += c;
 		}
 		return str;
 	}
