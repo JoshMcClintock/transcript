@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -30,8 +31,8 @@ public class AnalyzerPane extends GridPane {
 
 	private TextField outputPath;
 	private File outputDirectory;
-
-	private TextField transcriptId;
+	
+	private CheckBox chkEquivalencies;
 
 	public AnalyzerPane(Stage stage, HostServices hs) {
 
@@ -86,22 +87,14 @@ public class AnalyzerPane extends GridPane {
 
 		Label spacer2 = new Label(" ");
 		spacer2.setFont(font);
+		
+		Label spacer3 = new Label(" ");
+		spacer3.setFont(new Font(6));
 
 		Button btnViewMasterList = new Button("Master List");
 		btnViewMasterList.setFont(font);
 		btnViewMasterList.setAlignment(Pos.BASELINE_LEFT);
 		btnViewMasterList.setOnAction(this::viewMasterList);
-
-		transcriptId = new TextField();
-		transcriptId.setFont(font);
-		transcriptId.setPrefWidth(20);
-		transcriptId.setAlignment(Pos.BASELINE_LEFT);
-		transcriptId.setText("Transcript ID");
-
-		Button btnViewGPA = new Button("ind. GPA");
-		btnViewGPA.setFont(font);
-		btnViewGPA.setAlignment(Pos.BASELINE_LEFT);
-		btnViewGPA.setOnAction(this::viewGPA);
 
 		Button btnViewDistPerArea = new Button("Dist/Area");
 		btnViewDistPerArea.setFont(font);
@@ -113,6 +106,8 @@ public class AnalyzerPane extends GridPane {
 		btnViewDistPerCourse.setAlignment(Pos.BASELINE_LEFT);
 		btnViewDistPerCourse.setOnAction(this::vewDistPerCourse);
 
+		chkEquivalencies = new CheckBox("with Equivalencies");
+		
 		setAlignment(Pos.CENTER);
 		setHgap(5);
 		setVgap(5);
@@ -128,12 +123,11 @@ public class AnalyzerPane extends GridPane {
 		add(lblReadTranscripts, 1, 3);
 		add(spacer2, 0, 4);
 		add(viewLabel, 0, 5);
-		add(btnViewMasterList, 0, 6);
-		add(transcriptId, 2, 6);
-		add(btnViewGPA, 1, 6);
-		add(btnViewDistPerArea, 0, 7);
+		add(chkEquivalencies,1, 5);	
+		add(spacer3, 0, 6);
+		add(btnViewMasterList, 0, 7);
 		add(btnViewDistPerCourse, 1, 7);
-
+		add(btnViewDistPerArea, 2, 7);
 	}
 
 	public void setInputPath(ActionEvent event) {
@@ -168,16 +162,18 @@ public class AnalyzerPane extends GridPane {
 	}
 
 	public void viewMasterList(ActionEvent event) {
-		OutputWriter.writeMasterList();
-		System.out.println("Computed Master List");
 		
-		hs.showDocument(outputDirectory + "/Master List");
-	}
-	public void viewGPA(ActionEvent event) {
-		OutputWriter.writeGpaPerAreaPerTranscript(Integer.parseInt(transcriptId.getText()));
-		System.out.println("Computed GPA");
-		
-		hs.showDocument(outputDirectory + "/Gpa Per Transcript" + Integer.parseInt(transcriptId.getText()));
+		if (chkEquivalencies.isSelected()) {
+			OutputWriter.writeMasterListWithEq();
+			System.out.println("Computed Master List with Equivalencies");
+			
+			hs.showDocument(outputDirectory + "/Master List With Equivalence");
+		} else {
+			OutputWriter.writeMasterList();
+			System.out.println("Computed Master List");
+			
+			hs.showDocument(outputDirectory + "/Master List");
+		}
 	}
 
 	public void viewDistPerArea(ActionEvent event) {
@@ -188,9 +184,17 @@ public class AnalyzerPane extends GridPane {
 	}
 
 	public void vewDistPerCourse(ActionEvent event) {
-		OutputWriter.writeDistributionPerCourse();
-		System.out.println("Computed Dist per Course");
-	
-		hs.showDocument(outputDirectory + "/Distribution Per Course");
+		
+		if (chkEquivalencies.isSelected()) {
+			OutputWriter.writeDistributionPerCourseWithEq();
+			System.out.println("Computed Dist per Course with Equivalencies");
+			
+			hs.showDocument(outputDirectory + "/Distribution Per Course With Equivalence");
+		} else {
+			OutputWriter.writeDistributionPerCourse();
+			System.out.println("Computed Dist per Course");
+		
+			hs.showDocument(outputDirectory + "/Raw Distribution Per Course");
+		}
 	}
 }
