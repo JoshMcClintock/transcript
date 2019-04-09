@@ -96,12 +96,12 @@ public class AnalyzerPane extends GridPane {
 		btnViewMasterList.setAlignment(Pos.BASELINE_LEFT);
 		btnViewMasterList.setOnAction(this::viewMasterList);
 
-		Button btnViewDistPerArea = new Button("Dist/Area");
+		Button btnViewDistPerArea = new Button("Area Dist.");
 		btnViewDistPerArea.setFont(font);
 		btnViewDistPerArea.setAlignment(Pos.BASELINE_LEFT);
 		btnViewDistPerArea.setOnAction(this::viewDistPerArea);
 
-		Button btnViewDistPerCourse = new Button("Raw");
+		Button btnViewDistPerCourse = new Button("Raw Dist.");
 		btnViewDistPerCourse.setFont(font);
 		btnViewDistPerCourse.setAlignment(Pos.BASELINE_LEFT);
 		btnViewDistPerCourse.setOnAction(this::vewDistPerCourse);
@@ -177,10 +177,10 @@ public class AnalyzerPane extends GridPane {
 	}
 
 	public void viewDistPerArea(ActionEvent event) {
-		OutputWriter.writeDistributionPerArea();
+		OutputWriter.writeLevelPerArea();
 		System.out.println("Computed Dist per Area");
 
-		hs.showDocument(outputDirectory + "/Distribution Per Area");
+		hs.showDocument(outputDirectory + "/Average Distribution Per Area");
 	}
 
 	public void vewDistPerCourse(ActionEvent event) {
