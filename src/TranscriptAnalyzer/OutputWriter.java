@@ -192,4 +192,8 @@ public class OutputWriter {
 			ex.printStackTrace();
 		}
 	}
+
+	public static void setOutputDirectory(File path) {
+		outputDirectory = path;
+	}
 }
